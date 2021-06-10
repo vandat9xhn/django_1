@@ -1,0 +1,13 @@
+# test
+/__def_test
+
+# front-end
+/react_1
+
+# media
+/media/**.*
+
+# back-end
+/.idea
+db.sqlite3
+manage.py
