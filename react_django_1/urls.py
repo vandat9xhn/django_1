@@ -34,10 +34,11 @@ class CustomTemplateView(TemplateView):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/account/', include('account.urls')),
-    path('api/facebook/', include('facebook.urls')),
     path('api/profile/', include('user_profile.urls')),
     path('api/friend/', include('friend.urls')),
+    path('api/facebook/', include('facebook.urls')),
     path('api/shopee/', include('shopee.urls')),
+    path('api/city/', include('city.urls')),
 ]
 
 #
