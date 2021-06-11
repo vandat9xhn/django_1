@@ -1,11 +1,21 @@
 from rest_framework.generics import ListAPIView
 #
-from .serializers import PaymentSerializer, PaymentModel
+from . import models, serializers
 
 
 # Create your views here.
 
 
-class PaymentViewL(ListAPIView):
-    queryset = PaymentModel.objects.all()
-    serializer_class = PaymentSerializer
+# ---------------
+
+
+class PaymentView:
+    queryset = models.PaymentModel.objects.all()
+    serializer_class = serializers.PaymentSerializer
+
+
+# -----------------
+
+
+class PaymentViewL(PaymentView, ListAPIView):
+    pass

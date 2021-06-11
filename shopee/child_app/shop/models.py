@@ -11,8 +11,8 @@ class ShopModel(models.Model):
     profile_model = models.ForeignKey(profile_models.ProfileModel, on_delete=models.CASCADE, related_name='pf_sh')
 
     name = models.CharField(max_length=200)
-    picture = models.ImageField()
-    banner = models.ImageField()
+    picture = models.ImageField(upload_to='media/shopee')
+    banner = models.ImageField(upload_to='media/shopee')
     address = models.CharField(max_length=400)
     info = models.TextField()
 
@@ -22,7 +22,7 @@ class ShopModel(models.Model):
 
 class ShopVidPicModel(models.Model):
     shop_model = models.ForeignKey(ShopModel, on_delete=models.CASCADE, related_name='sh_vp')
-    vid_pic = models.FileField(validators=[valid_vid_pic])
+    vid_pic = models.FileField(validators=[valid_vid_pic], upload_to='media/shopee')
 
 
 class ShopVoucherPriceModel(models.Model):

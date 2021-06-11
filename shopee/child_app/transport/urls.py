@@ -1,9 +1,9 @@
 from django.urls import path
 #
-from .views import TransportViewL
+from . import views
 
 #
 
 urlpatterns = [
-    path('transport-l/', TransportViewL.as_view()),
+    path('transport-l/', views.TransportViewL.as_view()),
 ]

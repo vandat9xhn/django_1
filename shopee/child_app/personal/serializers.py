@@ -6,7 +6,7 @@ from . import models
 
 
 class CartSerializer(FieldSerializer):
-    name_field = 'carts[]'
+    name_field = 'cart[]'
     #
 
     class Meta:
@@ -15,7 +15,7 @@ class CartSerializer(FieldSerializer):
 
 
 class BuySerializer(FieldSerializer):
-    name_field = 'buys[]'
+    name_field = 'buy[]'
     #
 
     class Meta:
@@ -24,7 +24,7 @@ class BuySerializer(FieldSerializer):
 
 
 class CancelSerializer(FieldSerializer):
-    name_field = 'cancels[]'
+    name_field = 'cancel[]'
     #
 
     class Meta:

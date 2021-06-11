@@ -1,11 +1,23 @@
 from rest_framework.generics import ListAPIView
 #
-from .serializers import TransportSerializer, TransportModel
+from . import models, serializers
+#
+from _common.views.no_token import NoTokenView
 
 
 # Create your views here.
 
 
-class TransportViewL(ListAPIView):
-    queryset = TransportModel.objects.all()
-    serializer_class = TransportSerializer
+# ---------------
+
+
+class TransportView:
+    queryset = models.TransportModel.objects.all()
+    serializer_class = serializers.TransportSerializer
+
+
+# --------------
+
+
+class TransportViewL(NoTokenView, TransportView, ListAPIView):
+    pass

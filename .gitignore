@@ -6,6 +6,7 @@
 
 # media
 /media
+!/media/**.py
 
 # back-end
 /.idea

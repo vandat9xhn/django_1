@@ -8,7 +8,7 @@ from .models import TransportModel, TransportPriceModel
 
 
 class TransportPriceSerializer(FieldSerializer):
-    name_field = 'transport_prices[]'
+    name_field = 'transport_price[]'
     #
 
     class Meta:
@@ -17,9 +17,9 @@ class TransportPriceSerializer(FieldSerializer):
 
 
 class TransportSerializer(DataSerializerL):
-    name_field = 'transports[]'
+    name_field = 'transport[]'
     #
-    transport_prices = SerializerMethodField('get_transport_prices')
+    transport_prices = SerializerMethodField()
 
     class Meta:
         model = TransportModel
@@ -28,5 +28,5 @@ class TransportSerializer(DataSerializerL):
     def get_transport_prices(self, instance):
         return self.get_data_l(
             TransportPriceSerializer,
-            TransportModel.objects.filter(transport_model=instance.id)
+            TransportPriceModel.objects.filter(transport_model=instance.id)
         )

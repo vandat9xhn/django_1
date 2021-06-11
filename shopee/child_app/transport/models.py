@@ -11,6 +11,7 @@ class TransportModel(models.Model):
 
 
 class TransportPriceModel(models.Model):
+    transport_model = models.ForeignKey(TransportModel, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=100)
     info = models.TextField()
     price = models.IntegerField()

@@ -10,6 +10,7 @@ from user_profile.models import ProfileModel
 class CartModel(models.Model):
     profile_model = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='pf_cart')
     product_model = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='pd_cart')
+    checked = models.BooleanField(default=False)
     quantity = models.IntegerField()
     created_time = models.DateTimeField(auto_now_add=True)
 

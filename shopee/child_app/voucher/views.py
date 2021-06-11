@@ -1,11 +1,18 @@
 from rest_framework.generics import ListAPIView
 #
-from .serializers import VoucherSerializer, VoucherModel
+from . import models, serializers
 
 
 # Create your views here.
 
 
-class VoucherViewL(ListAPIView):
-    queryset = VoucherModel.objects.all()
-    serializer_class = VoucherSerializer
+class VoucherView:
+    queryset = models.VoucherModel.objects.all()
+    serializer_class = serializers.VoucherSerializer
+
+
+# -------------
+
+
+class VoucherViewL(VoucherView, ListAPIView):
+    pass

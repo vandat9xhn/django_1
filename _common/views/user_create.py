@@ -1,6 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 #
 from rest_framework.generics import CreateAPIView
+from rest_framework.response import Response
+from rest_framework import status
 #
 from user_profile.models import ProfileModel
 #
@@ -17,10 +19,15 @@ class UserCreateOnlyOne(UserCreateView):
     def create(self, request, *args, **kwargs):
         try:
             instance = self.get_instance()
-            instance.delete()
+            self.handle_exists(instance)
+
+            return Response(status=status.HTTP_200_OK)
 
         except ObjectDoesNotExist:
-            super().create(request, *args, **kwargs)
+            return super().create(request, *args, **kwargs)
 
     def get_instance(self):
         return self.queryset.get(profile_model=self.request.user.id)
+
+    def handle_exists(self, instance):
+        pass

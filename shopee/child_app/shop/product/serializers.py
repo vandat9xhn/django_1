@@ -12,7 +12,7 @@ from .rate import models as rate_models, serializers as rate_serializers
 
 
 class ProductVidPicSerializer(FieldSerializer):
-    name_field = 'product_vid_pics[]'
+    name_field = 'product_vid_pic[]'
 
     #
 
@@ -22,9 +22,11 @@ class ProductVidPicSerializer(FieldSerializer):
 
 
 class ProductSerializer(DataSerializerL):
-    name_field = 'products[]'
+    name_field = 'product[]'
     #
-    vid_pics = SerializerMethodField('get_vid_pics')
+    vid_pics = SerializerMethodField()
+    rates = SerializerMethodField()
+    comments = SerializerMethodField()
 
     class Meta:
         model = models.ProductModel

@@ -22,10 +22,12 @@ class ProductModel(models.Model):
     total = models.IntegerField()
     sold = models.IntegerField()
 
+    rate = models.FloatField(default=0)
+
     created_time = models.DateTimeField(auto_now_add=True)
     updated_time = models.DateTimeField(auto_now=True)
 
 
 class ProductVidPicModel(models.Model):
     product_model = models.ForeignKey(ProductModel, on_delete=models.CASCADE, related_name='pd_vp')
-    vid_pic = models.FileField(validators=[valid_vid_pic])
+    vid_pic = models.FileField(validators=[valid_vid_pic], upload_to='media/shopee/product')

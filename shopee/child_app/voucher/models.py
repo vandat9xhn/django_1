@@ -12,4 +12,4 @@ class VoucherModel(models.Model):
 
 class VoucherPaymentModel(models.Model):
     voucher_model = models.ForeignKey(VoucherModel, on_delete=models.CASCADE, related_name='vc_vc_pm')
-    payment_model = models.ForeignKey(PaymentModel, on_delete=models.CASCADE, related_name='pm_vc_pm')
+    payment_model = models.ForeignKey(PaymentModel, on_delete=models.CASCADE, related_name='pm_vc_pm', null=True)

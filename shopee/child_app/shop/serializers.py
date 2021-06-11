@@ -8,7 +8,7 @@ from . import models
 
 
 class ShopVidPicSerializer(FieldSerializer):
-    name_field = 'shop_vid_pics[]'
+    name_field = 'shop_vid_pic[]'
 
     #
 
@@ -18,7 +18,7 @@ class ShopVidPicSerializer(FieldSerializer):
 
 
 class ShopVoucherPriceSerializer(FieldSerializer):
-    name_field = 'shop_voucher_prices[]'
+    name_field = 'shop_voucher_price[]'
 
     #
 
@@ -28,7 +28,7 @@ class ShopVoucherPriceSerializer(FieldSerializer):
 
 
 class ShopVoucherAmountSerializer(FieldSerializer):
-    name_field = 'shop_voucher_amounts[]'
+    name_field = 'shop_voucher_amount[]'
 
     #
 
@@ -38,7 +38,7 @@ class ShopVoucherAmountSerializer(FieldSerializer):
 
 
 class ShopGiftSerializer(FieldSerializer):
-    name_field = 'shop_gifts[]'
+    name_field = 'shop_gift[]'
 
     #
 
@@ -48,7 +48,7 @@ class ShopGiftSerializer(FieldSerializer):
 
 
 class ShopGroupSerializer(FieldSerializer):
-    name_field = 'shop_groups[]'
+    name_field = 'shop_group[]'
 
     #
 
@@ -58,13 +58,13 @@ class ShopGroupSerializer(FieldSerializer):
 
 
 class ShopSerializer(DataSerializerL):
-    name_field = 'shops[]'
+    name_field = 'shop[]'
     #
-    vid_pics = SerializerMethodField('get_vid_pics')
-    voucher_prices = SerializerMethodField('get_voucher_prices')
-    voucher_amounts = SerializerMethodField('get_voucher_amounts')
-    groups = SerializerMethodField('get_groups')
-    gifts = SerializerMethodField('get_gifts')
+    vid_pics = SerializerMethodField()
+    voucher_prices = SerializerMethodField()
+    voucher_amounts = SerializerMethodField()
+    groups = SerializerMethodField()
+    gifts = SerializerMethodField()
 
     class Meta:
         model = models.ShopModel
