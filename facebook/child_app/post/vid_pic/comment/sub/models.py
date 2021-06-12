@@ -12,14 +12,14 @@ from _common.models import cmt_sub_abstract
 
 class VidPicSubModel(cmt_sub_abstract.CommentSubModel):
     profile_model = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='pf_vp_sub')
-    vid_pic_comment_model = models.ForeignKey(VidPicCmtModel, on_delete=models.CASCADE, related_name='cmt_sub')
+    comment_model = models.ForeignKey(VidPicCmtModel, on_delete=models.CASCADE, related_name='cmt_sub')
 
 
 class VidPicSubLikeModel(cmt_sub_abstract.LikeModel):
     profile_model = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='pf_vp_sub_like')
-    vid_pic_sub_model = models.ForeignKey(VidPicSubModel, on_delete=models.CASCADE, related_name='sub_like')
+    sub_model = models.ForeignKey(VidPicSubModel, on_delete=models.CASCADE, related_name='sub_like')
 
 
 class VidPicSubHistoryModel(cmt_sub_abstract.HistoryModel):
     profile_model = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='pf_vp_sub_his')
-    vid_pic_sub_model = models.ForeignKey(VidPicSubModel, on_delete=models.CASCADE, related_name='sub_his')
+    sub_model = models.ForeignKey(VidPicSubModel, on_delete=models.CASCADE, related_name='sub_his')

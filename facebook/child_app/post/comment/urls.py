@@ -1,6 +1,6 @@
 from django.urls import path
 #
-from .views import CommentViewLC, CmtLikeViewL, CmtHistoryViewL
+from . import views
 #
 from .sub.urls import urlpatterns as sub_urls
 
@@ -8,8 +8,12 @@ from .sub.urls import urlpatterns as sub_urls
 
 
 urlpatterns = [
-    path('cmt-lc', CommentViewLC.as_view()),
-    path('cmt-like-l', CmtLikeViewL.as_view()),
-    path('cmt-his-l', CmtHistoryViewL.as_view()),
+    path('cmt-lc/', views.CommentViewLC.as_view()),
+    path('cmt-ud/<int:pk>/', views.CommentViewUD.as_view()),
+
+    path('cmt-like-lc/', views.CmtLikeViewLC.as_view()),
+
+    path('cmt-his-l/', views.CmtHistoryViewL.as_view()),
+
     *sub_urls,
 ]

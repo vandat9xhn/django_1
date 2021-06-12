@@ -1,10 +1,19 @@
 from rest_framework.generics import ListAPIView
 #
-from .serializers import HistorySerializer, HistoryModel
-
+from . import models, serializers
 #
+from _common.views.facebook.post import FollowPostViewL
+
+# --------------
 
 
-class HistoryViewL(ListAPIView):
-    queryset = HistoryModel.objects.all()
-    serializer_class = HistorySerializer
+class HistoryView:
+    queryset = models.HistoryModel.objects.all()
+    serializer_class = serializers.HistorySerializer
+
+
+# --------------
+
+
+class HistoryViewL(HistoryView, FollowPostViewL):
+    pass

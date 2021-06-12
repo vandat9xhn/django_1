@@ -1,11 +1,11 @@
 from django.urls import path
 #
-from .views import LikeViewL, ShareViewL
+from . import views
 
 #
 
 
 urlpatterns = [
-    path('like-l/', LikeViewL.as_view()),
-    path('share-l/', ShareViewL.as_view()),
+    path('like-lc/', views.LikeViewLC.as_view()),
+    path('share-lc/', views.ShareViewLC.as_view()),
 ]

@@ -19,6 +19,7 @@ class VidPicModel(models.Model):
         clean_field.clean_content_vid_pic(self.content, self.vid_pic)
 
 
+#
 class VidPicLikeModel(models.Model):
     profile_model = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='pf_vp_l')
     vid_pic_model = models.ForeignKey(VidPicModel, on_delete=models.CASCADE, related_name='vp_like')
@@ -31,9 +32,7 @@ class VidPicShareModel(models.Model):
     count = models.IntegerField()
 
 
-# HISTORY
-
-
+#
 class VidPicHistoryModel(models.Model):
     vid_pic_model = models.ForeignKey(VidPicModel, on_delete=models.CASCADE, related_name='vp_his')
     content = models.TextField()

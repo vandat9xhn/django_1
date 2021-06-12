@@ -8,7 +8,7 @@ from . import models, serializers
 #
 from _common.views.no_token import NoTokenView
 from _common.views.user_create import UserCreateView
-from _common.views.user_update import UserUpdateView
+from _common.views.user_update import UserUpdateView, UserUpdateToHistoryView
 from _common.views.user_delete import UserDestroyView
 
 # Create your views here.
@@ -54,41 +54,18 @@ class CityViewC(CityView, UserCreateView):
     pass
 
 
-class CityViewU(CityView, UserUpdateView):
+class CityViewU(CityView, UserUpdateToHistoryView):
 
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        profile_model = instance.profile_model
-        user_id = request.user.id
+    @staticmethod
+    def get_update_fields():
+        return ['city', 'street', 'bg_color', 'quote', 'image']
 
-        if profile_model.id != user_id:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        data = request.data
-        data_history = {}
-
-        for field in ['city', 'street', 'quote', 'image']:
-            if field in data:
-                old_value = getattr(instance, field)
-                if data[field] != old_value:
-                    data_history[field] = old_value
-
-        if data_history == {}:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = self.get_serializer(instance, data=data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(profile=profile_model)
-
+    @staticmethod
+    def handle_model_history(instance, data_history):
         models.HistoryModel.objects.create(
             city_model=instance,
             **data_history,
         )
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            instance._prefetched_objects_cache = {}
-
-        return Response(status=status.HTTP_200_OK)
 
 
 class CityViewD(CityView, UserDestroyView):

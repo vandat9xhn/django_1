@@ -1,7 +1,9 @@
 from django.db.models import Sum
 #
 from _common.serializers.custom_field import FieldSerializer
-#
+
+
+# -------------
 
 
 class DataSerializerL(FieldSerializer):
@@ -34,6 +36,21 @@ class DataSerializerL(FieldSerializer):
             many=True,
             context={'request': request}
         ).data[c_count:size]
+
+
+class DataSerializerR(FieldSerializer):
+
+    def get_data_r(self, serializer_class, queryset):
+        request = self.context['request']
+
+        return serializer_class(
+            instance=queryset,
+            many=False,
+            context={'request': request}
+        ).data
+
+
+# -------------
 
 
 class ArrCountSerializer(DataSerializerL):
@@ -84,15 +101,3 @@ class DataShareSerializer(ArrCountSerializer):
 
 class DataLikeShareSerializer(DataLikeSerializer, DataShareSerializer):
     pass
-
-
-class DataSerializerR(FieldSerializer):
-
-    def get_data_r(self, serializer_class, queryset):
-        request = self.context['request']
-
-        return serializer_class(
-            instance=queryset,
-            many=False,
-            context={'request': request}
-        ).data

@@ -1,12 +1,15 @@
 from django.urls import path
 #
-from .views import SubViewLC, SubLikeViewL, SubHistoryViewL
+from . import views
 
 #
 
 
 urlpatterns = [
-    path('sub-lc', SubViewLC.as_view()),
-    path('sub-like-l', SubLikeViewL.as_view()),
-    path('sub-his-l', SubHistoryViewL.as_view()),
+    path('sub-lc/', views.SubViewLC.as_view()),
+    path('sub-ud/<int:pk>/', views.SubViewUD.as_view()),
+
+    path('sub-like-lc/', views.SubLikeViewLC.as_view()),
+
+    path('sub-his-l/', views.SubHistoryViewL.as_view()),
 ]

@@ -8,7 +8,7 @@ from .models import HistoryModel, HistoryVidPicCreateModel, HistoryVidPicDelMode
 
 
 class HistoryVidPicCreateSerializer(FieldSerializer):
-    name_field = 'create_histories[]'
+    name_field = 'history_create[]'
 
     class Meta:
         model = HistoryVidPicCreateModel
@@ -16,7 +16,7 @@ class HistoryVidPicCreateSerializer(FieldSerializer):
 
 
 class HistoryVidPicDelSerializer(FieldSerializer):
-    name_field = 'del_histories[]'
+    name_field = 'history_del[]'
 
     class Meta:
         model = HistoryVidPicDelModel
@@ -24,10 +24,10 @@ class HistoryVidPicDelSerializer(FieldSerializer):
 
 
 class HistorySerializer(ArrCountSerializer):
-    name_field = 'histories[]'
+    name_field = 'history[]'
     #
-    del_obj = SerializerMethodField('get_del_obj')
-    create_obj = SerializerMethodField('get_create_obj')
+    del_obj = SerializerMethodField()
+    create_obj = SerializerMethodField()
 
     class Meta:
         model = HistoryModel
@@ -44,5 +44,5 @@ class HistorySerializer(ArrCountSerializer):
         return self.get_arr_count(
             HistoryVidPicCreateSerializer,
             HistoryVidPicCreateModel.objects.filter(his_model=instance.id),
-            'vid_pic_del'
+            'vid_pic_create'
         )

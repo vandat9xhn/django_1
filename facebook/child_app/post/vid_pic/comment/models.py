@@ -17,8 +17,8 @@ class VidPicCmtModel(cmt_sub_abstract.CommentSubModel):
 
 class VidPicCmtLikeModel(cmt_sub_abstract.LikeModel):
     profile_model = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='pf_vp_cmt_l')
-    vid_pic_Cmt_model = models.ForeignKey(VidPicCmtModel, on_delete=models.CASCADE, related_name='vp_cmt_like')
+    comment_model = models.ForeignKey(VidPicCmtModel, on_delete=models.CASCADE, related_name='vp_cmt_like')
 
 
 class VidPicCmtHistoryModel(cmt_sub_abstract.HistoryModel):
-    vid_pic_Cmt_model = models.ForeignKey(VidPicCmtModel, on_delete=models.CASCADE, related_name='vp_cmt_his')
+    comment_model = models.ForeignKey(VidPicCmtModel, on_delete=models.CASCADE, related_name='vp_cmt_his')
