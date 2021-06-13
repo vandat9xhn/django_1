@@ -40,7 +40,7 @@ class VidPicHistorySerializer(FieldSerializer):
 
 
 class VidPicSerializer(DataLikeShareSerializer):
-    name_field = 'vid_pics[]'
+    name_field = 'vid_pic[]'
     #
     comment_obj = SerializerMethodField('get_comment_obj')
     like_obj = SerializerMethodField('get_like_obj')

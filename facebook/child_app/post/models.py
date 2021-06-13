@@ -8,15 +8,15 @@ from _common.models.choices import CHOICES_PERMISSION_USER
 
 
 CHOICES_POST_TO_WHERE = [
-    ('GROUP', 'group'),
-    ('USER', 'user'),
+    ('group', 'group'),
+    ('user', 'user'),
 ]
 
 CHOICES_POST_TYPE = [
-    ('POST', 'post'),
-    ('SHARE', 'share'),
-    ('PICTURE', 'picture'),
-    ('COVER', 'cover'),
+    ('post', 'post'),
+    ('share', 'share'),
+    ('picture', 'picture'),
+    ('cover', 'cover'),
 ]
 
 
@@ -30,8 +30,8 @@ class PostModel(models.Model):
     post_to_where = models.CharField(max_length=100, choices=CHOICES_POST_TO_WHERE)
     post_to_id = models.IntegerField()
 
-    content = models.TextField(null=True, default='')
-    permission = models.IntegerField(choices=CHOICES_PERMISSION_USER)
+    content = models.TextField(null=True, default='', blank=True)
+    permission = models.IntegerField(choices=CHOICES_PERMISSION_USER, default=0)
 
     created_time = models.DateTimeField(auto_now_add=True, null=True)
     updated_time = models.DateTimeField(auto_now=True)

@@ -13,7 +13,7 @@ from _common.models import valid_field, choices, clean_field
 class VidPicModel(models.Model):
     post_model = models.ForeignKey(PostModel, on_delete=models.CASCADE, related_name='p_v_p')
     content = models.TextField(null=True, default='')
-    vid_pic = models.FileField(validators=[valid_field.valid_vid_pic], null=True)
+    vid_pic = models.FileField(validators=[valid_field.valid_vid_pic], upload_to='media/facebook/post', null=True)
 
     def clean(self):
         clean_field.clean_content_vid_pic(self.content, self.vid_pic)

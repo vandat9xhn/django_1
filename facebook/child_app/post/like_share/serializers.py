@@ -1,21 +1,18 @@
-# from rest_framework.serializers import SerializerMethodField
-#
 from .models import LikeModel, ShareModel
 #
-from _common.serializers.data_field import FieldSerializer
+from _common.serializers.facebook.post import InteractiveSerializer
 
 
 #
 
 
-class LikeSerializer(FieldSerializer):
-
+class LikeSerializer(InteractiveSerializer):
     class Meta:
         model = LikeModel
         fields = '__all__'
 
 
-class ShareSerializer(FieldSerializer):
+class ShareSerializer(InteractiveSerializer):
     class Meta:
         model = ShareModel
         fields = '__all__'

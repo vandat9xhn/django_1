@@ -6,9 +6,9 @@ from rest_framework.generics import UpdateAPIView
 from . import serializers
 from . import models
 #
-from _common.views.permission_list import PermissionViewL
 from _common.views.user_delete import UserDestroyView
 from _common.views.active_view import change_active_instance
+from _common.views.facebook.post import FollowPostViewL
 
 
 # Create your views here.
@@ -50,7 +50,7 @@ class PictureCoverActiveViewU(UpdateAPIView):
 
 
 #
-class PictureViewL(PictureView, PermissionViewL):
+class PictureViewL(PictureView, FollowPostViewL):
     pass
 
 
@@ -59,7 +59,7 @@ class PictureViewUD(PictureView, PictureCoverActiveViewU, UserDestroyView):
 
 
 #
-class CoverViewL(CoverView, PermissionViewL):
+class CoverViewL(CoverView, FollowPostViewL):
     pass
 
 

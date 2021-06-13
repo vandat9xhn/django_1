@@ -60,8 +60,7 @@ class CityViewU(CityView, UserUpdateToHistoryView):
     def get_update_fields():
         return ['city', 'street', 'bg_color', 'quote', 'image']
 
-    @staticmethod
-    def handle_model_history(instance, data_history):
+    def handle_model_history(self, instance, data_history):
         models.HistoryModel.objects.create(
             city_model=instance,
             **data_history,

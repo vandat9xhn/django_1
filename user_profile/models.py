@@ -25,3 +25,4 @@ class PersonalSettingModel(models.Model):
     permission_add_friend = models.IntegerField(default=0)
     permission_follow = models.IntegerField(default=0)
     permission_post = models.IntegerField(default=0)
+    permission_see_interactive = models.IntegerField(default=0)

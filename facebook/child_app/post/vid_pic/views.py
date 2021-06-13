@@ -1,4 +1,4 @@
-from rest_framework.generics import RetrieveAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 #
 from . import models, serializers
 #
@@ -6,6 +6,7 @@ from _common.views.facebook.post import FollowPostViewL, FollowVidPicViewL
 from _common.views.user_create import UserCreateLike, UserCreateShare
 from _common.views.user_update import UserUpdateToHistoryView
 from _common.views.user_delete import UserDestroyView
+from _common.views.permission_view import PermissionViewR
 
 
 # --------------
@@ -39,14 +40,22 @@ class VidPicViewL(VidPicView, FollowPostViewL):
     pass
 
 
+class VidPicTypePostViewL(VidPicView, ListAPIView):
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        type_post = self.request.query_params.get('type_post')
+
+        return self.queryset.filter(post_model__type_post=type_post, post_model__profile_model=user_id)
+
+
 class VidPicViewRUD(VidPicView, RetrieveAPIView, UserUpdateToHistoryView, UserDestroyView):
 
     @staticmethod
     def get_update_fields():
         return ['content']
 
-    @staticmethod
-    def handle_model_history(instance, data_history):
+    def handle_model_history(self, instance, data_history):
         models.VidPicHistoryModel.objects.create(
             vid_pic_model=instance,
             **data_history,

@@ -1,6 +1,6 @@
 from django.urls import path
 #
-from .views import PostViewL
+from . import views
 #
 from .comment.urls import urlpatterns as cmt_urls
 from .vid_pic.urls import urlpatterns as vp_urls
@@ -11,7 +11,10 @@ from .history.urls import urlpatterns as his_urls
 
 
 urlpatterns = [
-    path('post-l/', PostViewL.as_view()),
+    path('post-lc/', views.PostViewLC.as_view()),
+    path('post-rud/<int:pk>/', views.PostViewRUD.as_view()),
+    path('post-permission-u/<int:pk>/', views.PostPerMissionViewU.as_view()),
+
     *cmt_urls,
     *vp_urls,
     *like_share_urls,

@@ -57,8 +57,7 @@ class VidPicSubViewUD(VidPicSubView, UserUpdateToHistoryView, UserDestroyView):
     def get_update_fields():
         return ['content', 'vid_pic']
 
-    @staticmethod
-    def handle_model_history(instance, data_history):
+    def handle_model_history(self, instance, data_history):
         models.VidPicSubHistoryModel.objects.create(
             sub_model=instance,
             **data_history,

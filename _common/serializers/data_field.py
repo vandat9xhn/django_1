@@ -76,7 +76,8 @@ class DataLikeSerializer(ArrCountSerializer):
         user = self.context['request'].user
         user_type_like = -1
         if user:
-            user_type_like = queryset.filter(profile_model=user.id).type_like
+            if queryset.filter(profile_model=user.id).exists():
+                user_type_like = queryset.get(profile_model=user.id).type_like
 
         return {
             **self.get_arr_count(serializer, queryset, field),
@@ -95,7 +96,7 @@ class DataShareSerializer(ArrCountSerializer):
         return {
             **self.get_arr_count(serializer, queryset, field),
             'user_count_share': user_count_share,
-            'total_share': queryset.aggregate(Sum('count'))
+            'total_share': sum(queryset.values_list('count'))
         }
 
 

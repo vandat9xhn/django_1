@@ -13,16 +13,22 @@ from _common.views.active_view import change_active_instance
 class UserUpdateView(UpdateAPIView):
 
     def update(self, request, *args, **kwargs):
-        user = request.user
-        profile_id = self.get_object().profile_model.id
-
-        if user.id == profile_id:
+        if self.has_permission():
             return super().update(request, *args, **kwargs)
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def perform_update(self, serializer):
         serializer.save(profile_model=ProfileModel.objects.get(id=self.request.user.id))
+
+    def has_permission(self):
+        user_id = self.request.user.id
+        profile_id = self.get_object().profile_model.id
+
+        if user_id == profile_id:
+            return True
+
+        return False
 
 
 class UserUpdateOnlyOne(UserUpdateView):
@@ -57,8 +63,12 @@ class UserUpdateToHistoryView(UpdateAPIView):
         data_new = {
             profile_model: user_id,
         }
+        update_fields = self.get_update_fields()
 
-        for field in self.get_update_fields():
+        if not update_fields:
+            update_fields = []
+
+        for field in update_fields:
             if field in data:
                 new_value = data[field]
                 old_value = getattr(instance, field)
