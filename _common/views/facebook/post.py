@@ -16,8 +16,8 @@ from facebook.child_app.post.vid_pic.comment.sub.models import VidPicSubModel
 
 class PostPermissionViewL(ListAPIView):
 
-    def has_permission_queryset(self, instance):
-        post_model = self.get_post_model(instance)
+    def has_permission_queryset(self, follow_model):
+        post_model = self.get_post_model(follow_model)
 
         relative = friend_relative_num(
             self.request.user.id,
@@ -29,8 +29,8 @@ class PostPermissionViewL(ListAPIView):
 
         return False
 
-    def get_post_model(self, instance):
-        return instance
+    def get_post_model(self, follow_model):
+        return follow_model
 
 
 # ------------
@@ -54,13 +54,15 @@ class FollowCommentViewL(PostPermissionViewL):
         comment_id = self.request.query_params.get('comment_model')
         comment_model = CommentModel.objects.get(id=comment_id)
 
+        print(1)
+
         if self.has_permission_queryset(comment_model):
             return self.queryset.filter(comment_model=comment_id)
 
         return []
 
-    def get_post_model(self, instance):
-        return instance.post_model
+    def get_post_model(self, follow_model):
+        return follow_model.post_model
 
 
 class FollowSubViewL(PostPermissionViewL):
@@ -74,8 +76,8 @@ class FollowSubViewL(PostPermissionViewL):
 
         return []
 
-    def get_post_model(self, instance):
-        return instance.comment_model.post_model
+    def get_post_model(self, follow_model):
+        return follow_model.comment_model.post_model
 
 
 #
@@ -90,8 +92,8 @@ class FollowVidPicViewL(PostPermissionViewL):
 
         return []
 
-    def get_post_model(self, instance):
-        return instance.post_model
+    def get_post_model(self, follow_model):
+        return follow_model.post_model
 
 
 class FollowVidPicCmtViewL(PostPermissionViewL):
@@ -105,8 +107,8 @@ class FollowVidPicCmtViewL(PostPermissionViewL):
 
         return []
 
-    def get_post_model(self, instance):
-        return instance.vid_pic_model.post_model
+    def get_post_model(self, follow_model):
+        return follow_model.vid_pic_model.post_model
 
 
 class FollowVidPicSubViewL(PostPermissionViewL):
@@ -120,5 +122,5 @@ class FollowVidPicSubViewL(PostPermissionViewL):
 
         return []
 
-    def get_post_model(self, instance):
-        return instance.comment_model.vid_pic_model.post_model
+    def get_post_model(self, follow_model):
+        return follow_model.comment_model.vid_pic_model.post_model

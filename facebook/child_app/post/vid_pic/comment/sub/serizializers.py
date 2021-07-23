@@ -12,7 +12,7 @@ from _common.serializers.data_field import FieldSerializer, DataLikeSerializer
 
 
 class VidPicSubLikeSerializer(FieldSerializer):
-    name_field = 'vid_pic_sub_like[]'
+    name_field = 'vid_pic_sub_likes'
 
     #
 
@@ -22,7 +22,7 @@ class VidPicSubLikeSerializer(FieldSerializer):
 
 
 class VidPicSubHistorySerializer(FieldSerializer):
-    name_field = 'vid_pic_sub_history[]'
+    name_field = 'vid_pic_sub_histories'
 
     #
 
@@ -32,7 +32,7 @@ class VidPicSubHistorySerializer(FieldSerializer):
 
 
 class VidPicSubSerializer(DataLikeSerializer):
-    name_field = 'vid_pic_sub[]'
+    name_field = 'vid_pic_subs'
     #
     like_obj = SerializerMethodField('get_like_obj')
     history_obj = SerializerMethodField('get_history_obj')

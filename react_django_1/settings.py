@@ -47,9 +47,11 @@ INSTALLED_APPS = [
     'account',
     'user_profile',
     'friend',
+    'notice',
 
     'facebook',
     'shopee',
+    'phone_lap',
     'chat',
     'city',
 ]

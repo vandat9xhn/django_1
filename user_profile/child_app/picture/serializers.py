@@ -8,7 +8,7 @@ from _common.serializers import data_field
 
 
 class PictureSerializer(data_field.DataSerializerR):
-    name_field = 'pf_picture[]'
+    name_field = 'pf_pictures'
     #
 
     class Meta:
@@ -17,7 +17,7 @@ class PictureSerializer(data_field.DataSerializerR):
 
 
 class CoverSerializer(data_field.DataSerializerR):
-    name_field = 'pf_cover[]'
+    name_field = 'pf_covers'
     #
 
     class Meta:

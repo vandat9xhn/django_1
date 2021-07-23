@@ -10,7 +10,7 @@ from . import models
 
 
 class ProductCmtVidPicSerializer(FieldSerializer):
-    name_field = 'product_cmt_vid_pic[]'
+    name_field = 'product_cmt_vid_pics'
     #
 
     class Meta:

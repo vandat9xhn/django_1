@@ -1,3 +1,5 @@
+from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 #
 from . import models, serializers
@@ -79,6 +81,32 @@ class VidPicShareViewLC(VidPicShareView, FollowVidPicViewL, UserCreateShare):
         vid_pic_id = self.request.data.get('vid_pic_model')
 
         return self.queryset.get(profile_model=user_id, vid_pic_model=vid_pic_id).count
+
+    def has_permission_create(self):
+        return super().has_permission_create()
+
+    def handle_create_share(self):
+        user_id = self.request.user.id
+        vid_pic_id = self.request.data.get('vid_pic_model')
+
+        serializer = self.get_serializer(data={
+            'profile_model': user_id,
+            'vid_pic_model': vid_pic_id,
+            'count': 1,
+        })
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+
+    def handle_update_share(self):
+        user_id = self.request.user.id
+
+        instance = self.queryset.get(profile_model=user_id)
+        instance.count += 1
+        instance.save()
+
+        return Response(status=status.HTTP_200_OK)
 
 
 #

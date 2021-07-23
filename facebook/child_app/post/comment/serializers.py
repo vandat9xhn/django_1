@@ -2,6 +2,8 @@ from rest_framework.serializers import SerializerMethodField
 #
 from .models import CommentModel, CmtLikeModel, CmtHistoryModel
 #
+from .sub.serizializers import SubSerializer, SubModel
+#
 from _common.serializers.data_field import FieldSerializer, DataLikeSerializer
 #
 
@@ -10,7 +12,7 @@ from _common.serializers.data_field import FieldSerializer, DataLikeSerializer
 
 
 class CmtLikeSerializer(FieldSerializer):
-    name_field = 'cmt_likes[]'
+    name_field = 'cmt_likes'
     #
 
     class Meta:
@@ -19,7 +21,7 @@ class CmtLikeSerializer(FieldSerializer):
 
 
 class CmtHistorySerializer(FieldSerializer):
-    name_field = 'cmt_histories[]'
+    name_field = 'cmt_historys'
     #
 
     class Meta:
@@ -28,14 +30,22 @@ class CmtHistorySerializer(FieldSerializer):
 
 
 class CommentSerializer(DataLikeSerializer):
-    name_field = 'comments[]'
+    name_field = 'comments'
     #
-    like_obj = SerializerMethodField('get_like_obj')
-    history_obj = SerializerMethodField('get_history_obj')
+    sub_obj = SerializerMethodField()
+    like_obj = SerializerMethodField()
+    history_obj = SerializerMethodField()
 
     class Meta:
         fields = '__all__'
         model = CommentModel
+
+    def get_sub_obj(self, instance):
+        return self.get_arr_count(
+            SubSerializer,
+            SubModel.objects.filter(comment_model=instance.id),
+            'cmt_sub',
+        )
 
     def get_like_obj(self, instance):
         return self.get_data_like(

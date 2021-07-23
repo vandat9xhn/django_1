@@ -8,7 +8,7 @@ from _common.serializers import custom_field
 
 
 class FamilySerializer(custom_field.FieldSerializer):
-    name_field = 'family[]'
+    name_field = 'familys'
 
     class Meta:
         model = models.FamilyModel
@@ -16,7 +16,7 @@ class FamilySerializer(custom_field.FieldSerializer):
 
 
 class RelationSerializer(custom_field.FieldSerializer):
-    name_field = 'relation[]'
+    name_field = 'relations'
 
     class Meta:
         model = models.RelationModel

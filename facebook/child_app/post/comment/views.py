@@ -1,11 +1,11 @@
-from rest_framework.generics import ListAPIView
 #
 from . import models, serializers
 #
-from _common.views.user_create import UserCreateView, UserCreateLike
+from _common.views.user_create import UserCreateLike
 from _common.views.user_update import UserUpdateToHistoryView
 from _common.views.user_delete import UserDestroyView
-from _common.views.facebook.post import FollowPostViewL
+from _common.views.facebook.post import FollowPostViewL, FollowCommentViewL
+from _common.views.facebook.post_create import CommentSubViewC
 
 # Create your views here.
 
@@ -31,18 +31,18 @@ class CmtHistoryView:
 # -------------
 
 
-class CmtLikeHistoryViewL(ListAPIView):
+class CmtLikeHistoryViewL(FollowCommentViewL):
 
     def get_queryset(self):
-        comment_id = self.request.query_params.get('comment_model')
+        queryset = super().get_queryset()
 
-        return self.queryset.filter(comment_model=comment_id)
+        return queryset
 
 
 # ----------------
 
 
-class CommentViewLC(CommentView, FollowPostViewL, UserCreateView):
+class CommentViewLC(CommentView, FollowPostViewL, CommentSubViewC):
     pass
 
 
@@ -62,8 +62,8 @@ class CommentViewUD(CommentView, UserUpdateToHistoryView, UserDestroyView):
 #
 class CmtLikeViewLC(CmtLikeView, CmtLikeHistoryViewL, UserCreateLike):
 
-    def get_instance(self):
-        comment_id = self.request.query_params.get('comment_model')
+    def get_instance_create(self):
+        comment_id = self.request.data.get('comment_model')
 
         return self.queryset.get(comment_model=comment_id, profile_model=self.request.user.id)
 

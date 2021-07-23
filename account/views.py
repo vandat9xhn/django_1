@@ -1,5 +1,5 @@
 from django.shortcuts import HttpResponse
-from django.contrib.auth import authenticate, settings
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout, settings
 from django.contrib.auth.models import User
 #
 from rest_framework.response import Response
@@ -168,6 +168,7 @@ def login(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
+    auth_login(request, user)
 
     if not user:
         return HttpResponse('Wrong')
@@ -188,8 +189,20 @@ def login(request):
     return response
 
 
+def logout(request):
+    auth_logout(request)
+
+    return HttpResponse('')
+
+
 #
 def define_user(request):
+    # print(request.session.get('_auth_user_hash'))
+    if request.user.id:
+        return HttpResponse(json.dumps(
+            get_data_profile(request.user.id)
+        ))
+
     username, password = load_account_from_cookie(request.COOKIES.get(settings.LOGIN_COOKIE_KEY))
     user = authenticate(username=username, password=password)
 

@@ -6,7 +6,7 @@ from rest_framework.generics import ListCreateAPIView
 #
 from . import models, serializers
 #
-from .vid_pic.models import VidPicModel
+from .vid_pic.models import VidPicModel, VidPicHistoryModel
 from .history.models import HistoryModel, HistoryVidPicCreateModel, HistoryVidPicDelModel
 #
 from friend.models import get_friend_id_arr, friend_relative_num
@@ -34,7 +34,22 @@ def has_permission_post_create(post_to_where, post_to_id, user_id):
     return True
 
 
-def handle_his_vid_pics(user_id, his_model, create_vid_pics, create_vid_pic_contents, delete_vid_pic_ids):
+def handle_his_vid_pics(
+        user_id, his_model, instance,
+        create_vid_pics,
+        create_vid_pic_contents,
+        delete_vid_pic_ids,
+        update_vid_pic_ids,
+        update_vid_pic_contents
+):
+    #
+    if instance.content == '':
+        if len(create_vid_pics) == 0:
+            if len(delete_vid_pic_ids) == VidPicModel.objects.filter(post_model=instance.id).count():
+                instance.delete()
+                return
+
+    #
     if len(create_vid_pics):
         HistoryVidPicCreateModel.objects.bulk_create([
             HistoryVidPicCreateModel(
@@ -51,13 +66,34 @@ def handle_his_vid_pics(user_id, his_model, create_vid_pics, create_vid_pic_cont
             ) for vid_pic, content in zip(create_vid_pics, create_vid_pic_contents)
         ])
 
+    #
+    old_update_vid_pic_contents = []
+
+    for i in range(len(update_vid_pic_ids)):
+        vid_pic_model = VidPicModel.objects.get(id=update_vid_pic_ids[i])
+
+        if vid_pic_model.post_model.profile_model.id == user_id:
+            old_update_vid_pic_contents += vid_pic_model.content
+            vid_pic_model.content = update_vid_pic_contents[i]
+            vid_pic_model.save()
+        else:
+            return
+
+    VidPicHistoryModel.objects.bulk_create([
+        VidPicHistoryModel(
+            vid_pic_model=VidPicModel.objects.get(id=update_vid_pic_ids[i]),
+            content=old_update_vid_pic_contents[i],
+        ) for i in range(len(old_update_vid_pic_contents))
+    ])
+
+    #
     delete_vid_pics = []
 
     for pk_del in delete_vid_pic_ids:
         vid_pic_model = VidPicModel.objects.get(id=pk_del)
+
         if vid_pic_model.post_model.profile_model.id == user_id:
             delete_vid_pics += vid_pic_model.vid_pic.url
-            print(delete_vid_pics)
         else:
             return
 
@@ -113,15 +149,9 @@ class PostViewLC(PostView, ListCreateAPIView):
         user_id = request.user.id
         type_post = request.data.get('type_post')
 
-        post_to_where = request.data.get('post_to_where')
-        post_to_id = request.data.get('post_to_id')
+        post_to_where = request.data.get('post_to_where') or 'user'
+        post_to_id = request.data.get('post_to_id') or user_id
         content = request.data.get('content')
-
-        if not post_to_where:
-            post_to_where = 'user'
-
-        if not post_to_id:
-            post_to_id = user_id
 
         if not has_permission_post_create(post_to_where, post_to_id, user_id):
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -226,15 +256,18 @@ class PostViewRUD(PostView, PermissionViewR, UserUpdateToHistoryView, UserDestro
             user_id = self.request.user.id
             create_vid_pics = self.request.data.getlist('create_vid_pics')
             create_vid_pic_contents = self.request.data.getlist('create_vid_pic_contents')
-            delete_vid_pics = self.request.data.getlist('delete_vid_pics')
+            update_vid_pic_ids = self.request.data.getlist('update_vid_pic_ids')
+            update_vid_pic_contents = self.request.data.getlist('update_vid_pic_contents')
+            delete_vid_pic_ids = self.request.data.getlist('delete_vid_pic_ids')
 
-            if instance.content == '':
-                if len(create_vid_pics) == 0:
-                    if len(delete_vid_pics) == VidPicModel.objects.filter(post_model=instance.id).count():
-                        instance.delete()
-                        return Response(status=status.HTTP_204_NO_CONTENT)
-
-            handle_his_vid_pics(user_id, his_model, create_vid_pics, create_vid_pic_contents, delete_vid_pics)
+            handle_his_vid_pics(
+                user_id, his_model, instance,
+                create_vid_pics,
+                create_vid_pic_contents,
+                delete_vid_pic_ids,
+                update_vid_pic_ids,
+                update_vid_pic_contents
+            )
 
     def handle_fail_update(self, instance, data_history):
         if instance.type_post != 'post':
@@ -243,16 +276,25 @@ class PostViewRUD(PostView, PermissionViewR, UserUpdateToHistoryView, UserDestro
         user_id = self.request.user.id
         create_vid_pics = self.request.data.getlist('create_vid_pics')
         create_vid_pic_contents = self.request.data.getlist('create_vid_pic_contents')
+        update_vid_pic_ids = self.request.data.getlist('update_vid_pic_ids')
+        update_vid_pic_contents = self.request.data.getlist('update_vid_pic_contents')
         delete_vid_pic_ids = self.request.data.getlist('delete_vid_pic_ids')
 
-        if len(create_vid_pics) + len(delete_vid_pic_ids) == 0:
+        if len(create_vid_pics) + len(delete_vid_pic_ids) + len(update_vid_pic_ids) == 0:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         his_model = HistoryModel.objects.create(
             post_model=instance,
         )
 
-        handle_his_vid_pics(user_id, his_model, create_vid_pics, create_vid_pic_contents, delete_vid_pic_ids)
+        handle_his_vid_pics(
+            user_id, his_model, instance,
+            create_vid_pics,
+            create_vid_pic_contents,
+            delete_vid_pic_ids,
+            update_vid_pic_ids,
+            update_vid_pic_contents
+        )
 
         return Response(status=status.HTTP_200_OK)
 

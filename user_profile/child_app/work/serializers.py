@@ -8,7 +8,7 @@ from _common.serializers import custom_field
 
 
 class WorkSerializer(custom_field.FieldSerializer):
-    name_field = 'work[]'
+    name_field = 'works'
 
     class Meta:
         model = models.WorkModel
@@ -16,7 +16,7 @@ class WorkSerializer(custom_field.FieldSerializer):
 
 
 class SchoolSerializer(custom_field.FieldSerializer):
-    name_field = 'school[]'
+    name_field = 'schools'
 
     class Meta:
         model = models.SchoolModel
@@ -24,7 +24,7 @@ class SchoolSerializer(custom_field.FieldSerializer):
 
 
 class UniversitySerializer(custom_field.FieldSerializer):
-    name_field = 'university[]'
+    name_field = 'universitys'
 
     class Meta:
         model = models.UniversityModel

@@ -19,17 +19,25 @@ from _common.serializers import data_field, permission_field
 # 
 
 
-class DataProfilePermissionSerializerL(permission_field.DataPermissionSerializerL):
+class DataProfilePermissionSerializer(permission_field.DataPermissionSerializerL):
 
     def get_data_profile_permission_l(self, serializer, queryset, instance):
         return self.get_data_permission_l(serializer, queryset, instance.id)
+
+    def get_data_profile_permission_r(self, serializer, queryset, instance):
+        data = self.get_data_permission_l(serializer, queryset, instance.id)
+
+        if len(data):
+            return self.get_data_permission_l(serializer, queryset, instance.id)[0]
+
+        return {}
 
 
 #
 
 
 class NameSerializer(data_field.DataSerializerR):
-    name_field = 'pf_name[]'
+    name_field = 'pf_names'
     #
 
     class Meta:
@@ -38,21 +46,21 @@ class NameSerializer(data_field.DataSerializerR):
 
 
 #
-class ProfileSerializer(DataProfilePermissionSerializerL):
-    name_field = 'profile[]'
+class ProfileSerializer(DataProfilePermissionSerializer):
+    name_field = 'profiles'
     #
     first_name = SerializerMethodField()
     last_name = SerializerMethodField()
     picture = SerializerMethodField()
     cover = SerializerMethodField()
     #
-    gender_arr = SerializerMethodField()
-    birth_arr = SerializerMethodField()
-    lang_arr = SerializerMethodField()
+    gender_obj = SerializerMethodField()
+    birth_obj = SerializerMethodField()
+    lang_obj = SerializerMethodField()
 
     life_arr = SerializerMethodField()
 
-    mail_arr = SerializerMethodField()
+    mail_obj = SerializerMethodField()
     phone_arr = SerializerMethodField()
     address_arr = SerializerMethodField()
 
@@ -60,14 +68,14 @@ class ProfileSerializer(DataProfilePermissionSerializerL):
     city_arr = SerializerMethodField()
 
     family_arr = SerializerMethodField()
-    relation_arr = SerializerMethodField()
+    relationship_obj = SerializerMethodField()
 
     work_arr = SerializerMethodField()
     school_arr = SerializerMethodField()
     university_arr = SerializerMethodField()
 
-    hobby_arr = SerializerMethodField()
-    you_arr = SerializerMethodField()
+    hobby_obj = SerializerMethodField()
+    you_obj = SerializerMethodField()
     other_name_arr = SerializerMethodField()
 
     class Meta:
@@ -92,22 +100,22 @@ class ProfileSerializer(DataProfilePermissionSerializerL):
         return CoverModel.objects.get(profile_model=instance.id, is_active=True).url
 
     # basis
-    def get_gender_arr(self, instance):
-        return self.get_data_profile_permission_l(
+    def get_gender_obj(self, instance):
+        return self.get_data_profile_permission_r(
             basis_ser.GenderSerializer,
             basis_ser.models.GenderModel.objects.filter(profile_model=instance.id),
             instance
         )
 
-    def get_birth_arr(self, instance):
-        return self.get_data_profile_permission_l(
+    def get_birth_obj(self, instance):
+        return self.get_data_profile_permission_r(
             basis_ser.BirthSerializer,
             basis_ser.models.BirthModel.objects.filter(profile_model=instance.id),
             instance
         )
 
-    def get_lang_arr(self, instance):
-        return self.get_data_profile_permission_l(
+    def get_lang_obj(self, instance):
+        return self.get_data_profile_permission_r(
             basis_ser.LanguageSerializer,
             basis_ser.models.LanguageModel.objects.filter(profile_model=instance.id),
             instance
@@ -122,8 +130,8 @@ class ProfileSerializer(DataProfilePermissionSerializerL):
         )
 
     # contact
-    def get_mail_arr(self, instance):
-        return self.get_data_profile_permission_l(
+    def get_mail_obj(self, instance):
+        return self.get_data_profile_permission_r(
             contact_ser.MailSerializer,
             contact_ser.models.MailModel.objects.filter(profile_model=instance.id),
             instance
@@ -166,8 +174,8 @@ class ProfileSerializer(DataProfilePermissionSerializerL):
             instance
         )
     
-    def get_relation_arr(self, instance):
-        return self.get_data_profile_permission_l(
+    def get_relationship_obj(self, instance):
+        return self.get_data_profile_permission_r(
             relation_ser.RelationSerializer,
             relation_ser.models.RelationModel.objects.filter(profile_model=instance.id),
             instance
@@ -196,15 +204,15 @@ class ProfileSerializer(DataProfilePermissionSerializerL):
         )
 
     # hobby
-    def get_hobby_arr(self, instance):
-        return self.get_data_profile_permission_l(
+    def get_hobby_obj(self, instance):
+        return self.get_data_profile_permission_r(
             you_ser.HobbySerializer,
             you_ser.models.HobbyModel.objects.filter(profile_model=instance.id),
             instance
         )
 
-    def get_you_arr(self, instance):
-        return self.get_data_profile_permission_l(
+    def get_you_obj(self, instance):
+        return self.get_data_profile_permission_r(
             you_ser.AboutYouSerializer,
             you_ser.models.AboutYouModel.objects.filter(profile_model=instance.id),
             instance
@@ -219,7 +227,7 @@ class ProfileSerializer(DataProfilePermissionSerializerL):
 
 
 class PersonalSettingSerializer(data_field.FieldSerializer):
-    name_field = 'personal_setting[]'
+    name_field = 'personal_settings'
 
     class Meta:
         model = PersonalSettingModel

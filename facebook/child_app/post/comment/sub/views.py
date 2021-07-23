@@ -1,10 +1,11 @@
-from rest_framework.generics import ListAPIView
 #
 from . import models, serizializers
 #
 from _common.views.user_create import UserCreateView, UserCreateLike
 from _common.views.user_update import UserUpdateToHistoryView
 from _common.views.user_delete import UserDestroyView
+from _common.views.facebook.post import FollowSubViewL, FollowCommentViewL
+
 
 # Create your views here.
 
@@ -30,24 +31,24 @@ class SubHistoryView:
 # -------------
 
 
-class SubLikeHistoryViewL(ListAPIView):
+class SubLikeHistoryViewL(FollowSubViewL):
 
     def get_queryset(self):
-        sub_id = self.request.query_params.get('sub_model')
+        queryset = super().get_queryset()
 
-        return self.queryset.filter(sub_model=sub_id)
+        return queryset
 
 
 # -------------
 
 
 #
-class SubViewLC(SubView, ListAPIView, UserCreateView):
+class SubViewLC(SubView, FollowCommentViewL, UserCreateView):
 
     def get_queryset(self):
-        comment_id = self.request.query_params.get('comment_model')
+        queryset = super().get_queryset()
 
-        return self.queryset.filter(comment_model=comment_id)
+        return queryset
 
 
 class SubViewUD(SubView, UserUpdateToHistoryView, UserDestroyView):
@@ -66,8 +67,8 @@ class SubViewUD(SubView, UserUpdateToHistoryView, UserDestroyView):
 #
 class SubLikeViewLC(SubLikeView, SubLikeHistoryViewL, UserCreateLike):
 
-    def get_instance(self):
-        sub_id = self.request.query_params.get('sub_model')
+    def get_instance_create(self):
+        sub_id = self.request.data.get('sub_model')
 
         return self.queryset.get(sub_model=sub_id, profile_model=self.request.user.id)
 

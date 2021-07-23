@@ -1,13 +1,13 @@
 #
 from friend.models import friend_has_permission
 #
-from _common.serializers.data_field import FieldSerializer
+from _common.serializers.data_user import DataProfileSerializer
 
 
 #
 
 
-class InteractiveSerializer(FieldSerializer):
+class InteractiveSerializer(DataProfileSerializer):
 
     def get_fields(self):
         if not friend_has_permission(

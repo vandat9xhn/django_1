@@ -8,7 +8,7 @@ from . import models
 
 
 class ShopVidPicSerializer(FieldSerializer):
-    name_field = 'shop_vid_pic[]'
+    name_field = 'shop_vid_pics'
 
     #
 
@@ -18,7 +18,7 @@ class ShopVidPicSerializer(FieldSerializer):
 
 
 class ShopVoucherPriceSerializer(FieldSerializer):
-    name_field = 'shop_voucher_price[]'
+    name_field = 'shop_voucher_prices'
 
     #
 
@@ -28,7 +28,7 @@ class ShopVoucherPriceSerializer(FieldSerializer):
 
 
 class ShopVoucherAmountSerializer(FieldSerializer):
-    name_field = 'shop_voucher_amount[]'
+    name_field = 'shop_voucher_amounts'
 
     #
 
@@ -38,7 +38,7 @@ class ShopVoucherAmountSerializer(FieldSerializer):
 
 
 class ShopGiftSerializer(FieldSerializer):
-    name_field = 'shop_gift[]'
+    name_field = 'shop_gifts'
 
     #
 
@@ -58,7 +58,7 @@ class ShopGroupSerializer(FieldSerializer):
 
 
 class ShopSerializer(DataSerializerL):
-    name_field = 'shop[]'
+    name_field = 'shops'
     #
     vid_pics = SerializerMethodField()
     voucher_prices = SerializerMethodField()

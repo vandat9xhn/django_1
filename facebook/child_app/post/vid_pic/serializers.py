@@ -10,7 +10,7 @@ from .comment.serializers import VidPicCmtSerializer, VidPicCmtModel
 
 
 class VidPicLikeSerializer(FieldSerializer):
-    name_field = 'vid_pic_like[]'
+    name_field = 'vid_pic_likes'
     #
 
     class Meta:
@@ -19,7 +19,7 @@ class VidPicLikeSerializer(FieldSerializer):
 
 
 class VidPicShareSerializer(FieldSerializer):
-    name_field = 'vid_pic_share[]'
+    name_field = 'vid_pic_shares'
     #
 
     class Meta:
@@ -28,7 +28,7 @@ class VidPicShareSerializer(FieldSerializer):
 
 
 class VidPicHistorySerializer(FieldSerializer):
-    name_field = 'vid_pic_history[]'
+    name_field = 'vid_pic_histories'
     #
 
     class Meta:
@@ -40,7 +40,7 @@ class VidPicHistorySerializer(FieldSerializer):
 
 
 class VidPicSerializer(DataLikeShareSerializer):
-    name_field = 'vid_pic[]'
+    name_field = 'vid_pics'
     #
     comment_obj = SerializerMethodField('get_comment_obj')
     like_obj = SerializerMethodField('get_like_obj')

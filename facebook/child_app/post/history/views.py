@@ -1,8 +1,8 @@
-from rest_framework.generics import ListAPIView
 #
 from . import models, serializers
 #
 from _common.views.facebook.post import FollowPostViewL
+
 
 # --------------
 
@@ -16,4 +16,9 @@ class HistoryView:
 
 
 class HistoryViewL(HistoryView, FollowPostViewL):
-    pass
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # Filter more permission
+
+        return queryset

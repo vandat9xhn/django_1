@@ -58,7 +58,9 @@ class ArrCountSerializer(DataSerializerL):
     def get_arr_count(self, serializer, queryset, field):
         request = self.context['request']
 
-        if not request.query_params.get(field):
+        is_show_all = True
+
+        if not (request.query_params.get(field) or is_show_all):
             return {
                 'data': [],
                 'count': queryset.count()
@@ -66,6 +68,21 @@ class ArrCountSerializer(DataSerializerL):
 
         return {
             'data': self.get_data_l(serializer, queryset, field),
+            'count': queryset.count()
+        }
+
+
+class ArrWithCountSerializer(DataSerializerL):
+
+    def get_arr_with_count(self, serializer, queryset, count):
+        request = self.context['request']
+
+        return {
+            'data': serializer(
+                instance=queryset,
+                many=True,
+                context={'request': request}
+            ).data[0:count],
             'count': queryset.count()
         }
 

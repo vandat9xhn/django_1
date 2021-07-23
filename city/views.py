@@ -34,10 +34,7 @@ class HistoryView:
 class CityViewL(CityView, ListAPIView):
 
     def get_queryset(self):
-        search = self.request.query_params.get('search')
-
-        if search is None:
-            search = ''
+        search = self.request.query_params.get('search') or ''
 
         return self.queryset.filter(
             Q(city__contains=search) |

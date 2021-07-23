@@ -8,7 +8,7 @@ from _common.serializers import custom_field
 
 
 class HobbySerializer(custom_field.FieldSerializer):
-    name_field = 'hobby[]'
+    name_field = 'hobbys'
 
     class Meta:
         model = models.HobbyModel
@@ -16,7 +16,7 @@ class HobbySerializer(custom_field.FieldSerializer):
 
 
 class AboutYouSerializer(custom_field.FieldSerializer):
-    name_field = 'about_you[]'
+    name_field = 'about_yous'
 
     class Meta:
         model = models.AboutYouModel
@@ -24,7 +24,7 @@ class AboutYouSerializer(custom_field.FieldSerializer):
 
 
 class OtherNameSerializer(custom_field.FieldSerializer):
-    name_field = 'other_name[]'
+    name_field = 'other_names'
 
     class Meta:
         model = models.OtherNameModel

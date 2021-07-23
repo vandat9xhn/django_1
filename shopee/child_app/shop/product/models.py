@@ -20,8 +20,8 @@ class ProductModel(models.Model):
     discount = models.IntegerField()
     description = models.TextField()
     total = models.IntegerField()
-    sold = models.IntegerField()
 
+    sold = models.IntegerField()
     rate = models.FloatField(default=0)
 
     created_time = models.DateTimeField(auto_now_add=True)

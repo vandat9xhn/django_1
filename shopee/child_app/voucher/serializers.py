@@ -10,7 +10,7 @@ from .models import VoucherModel, VoucherPaymentModel
 
 
 class VoucherPaymentSerializer(FieldSerializer):
-    name_field = 'voucher_payment[]'
+    name_field = 'voucher_payments'
     #
 
     class Meta:
@@ -19,7 +19,7 @@ class VoucherPaymentSerializer(FieldSerializer):
 
 
 class VoucherSerializer(DataSerializerL):
-    name_field = 'voucher[]'
+    name_field = 'vouchers'
     #
     payment = SerializerMethodField()
 

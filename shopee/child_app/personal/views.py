@@ -49,7 +49,7 @@ class CartViewLC(CartView, ListAPIView, UserCreateOnlyOne):
 
         return self.queryset.filter(profile_model=user_id, checked=True)
 
-    def get_instance(self):
+    def get_instance_create(self):
         user_id = self.request.user.id
         product_id = self.request.data.get('product_model')
 

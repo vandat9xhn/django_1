@@ -12,7 +12,7 @@ from .rate import models as rate_models, serializers as rate_serializers
 
 
 class ProductVidPicSerializer(FieldSerializer):
-    name_field = 'product_vid_pic[]'
+    name_field = 'product_vid_pics'
 
     #
 
@@ -22,7 +22,7 @@ class ProductVidPicSerializer(FieldSerializer):
 
 
 class ProductSerializer(DataSerializerL):
-    name_field = 'product[]'
+    name_field = 'products'
     #
     vid_pics = SerializerMethodField()
     rates = SerializerMethodField()

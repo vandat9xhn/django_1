@@ -8,7 +8,7 @@ from _common.serializers import custom_field
 
 
 class GenderSerializer(custom_field.FieldSerializer):
-    name_field = 'gender[]'
+    name_field = 'genders'
 
     class Meta:
         model = models.GenderModel
@@ -16,7 +16,7 @@ class GenderSerializer(custom_field.FieldSerializer):
 
 
 class BirthSerializer(custom_field.FieldSerializer):
-    name_field = 'birth[]'
+    name_field = 'births'
 
     class Meta:
         model = models.BirthModel
@@ -24,7 +24,7 @@ class BirthSerializer(custom_field.FieldSerializer):
 
 
 class LanguageSerializer(custom_field.FieldSerializer):
-    name_field = 'lang[]'
+    name_field = 'langs'
 
     class Meta:
         model = models.LanguageModel

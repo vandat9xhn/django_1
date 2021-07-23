@@ -8,7 +8,7 @@ from _common.models import valid_field, choices, clean_field
 
 class CommentSubModel(models.Model):
     content = models.TextField(null=True)
-    vid_pic = models.FileField(validators=[valid_field.valid_vid_pic], null=True)
+    vid_pic = models.FileField(validators=[valid_field.valid_vid_pic], null=True, upload_to='media/facebook/post')
     created_time = models.DateTimeField(auto_now_add=True)
     updated_time = models.DateTimeField(auto_now=True)
 
@@ -16,6 +16,9 @@ class CommentSubModel(models.Model):
         abstract = True
 
     def clean(self):
+        clean_field.clean_content_vid_pic(self.content, self.vid_pic)
+
+    def full_clean(self, exclude=None, validate_unique=True):
         clean_field.clean_content_vid_pic(self.content, self.vid_pic)
 
 

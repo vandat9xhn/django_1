@@ -1,10 +1,10 @@
-from rest_framework.generics import ListAPIView
 #
 from . import models, serizializers
 #
 from _common.views.user_create import UserCreateView, UserCreateLike
 from _common.views.user_update import UserUpdateToHistoryView
 from _common.views.user_delete import UserDestroyView
+from _common.views.facebook.post import FollowVidPicCmtViewL, FollowVidPicSubViewL
 
 
 # Create your views here.
@@ -31,24 +31,26 @@ class VidPicSubHistoryView:
 # -------------
 
 
-class VidPicSubLikeHistoryViewL(ListAPIView):
+class VidPicSubLikeHistoryViewL(FollowVidPicSubViewL):
 
     def get_queryset(self):
-        sub_id = self.request.query_params.get('vid_pic_sub_model')
+        queryset = super().get_queryset()
+        # Filter more permission
 
-        return self.queryset.filter(sub_model=sub_id)
+        return queryset
 
 
 # -------------
 
 
 #
-class VidPicSubViewLC(VidPicSubView, ListAPIView, UserCreateView):
+class VidPicSubViewLC(VidPicSubView, FollowVidPicCmtViewL, UserCreateView):
 
     def get_queryset(self):
-        comment_id = self.request.query_params.get('vid_pic_comment_model')
+        queryset = super().get_queryset()
+        # Filter more permission
 
-        return self.queryset.filter(comment_model=comment_id)
+        return queryset
 
 
 class VidPicSubViewUD(VidPicSubView, UserUpdateToHistoryView, UserDestroyView):
@@ -67,8 +69,8 @@ class VidPicSubViewUD(VidPicSubView, UserUpdateToHistoryView, UserDestroyView):
 #
 class VidPicSubLikeViewLC(VidPicSubLikeView, VidPicSubLikeHistoryViewL, UserCreateLike):
 
-    def get_instance(self):
-        sub_id = self.request.query_params.get('vid_pic_sub_model')
+    def get_instance_create(self):
+        sub_id = self.request.data.get('vid_pic_sub_model')
 
         return self.queryset.get(sub_model=sub_id, profile_model=self.request.user.id)
 

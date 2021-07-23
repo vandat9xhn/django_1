@@ -9,7 +9,7 @@ from . import models
 
 
 class ProductRateSerializer(ContentFieldSerializer):
-    name_field = 'product_rate[]'
+    name_field = 'product_rates'
     #
     content_obj = SerializerMethodField()
 

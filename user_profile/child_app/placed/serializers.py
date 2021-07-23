@@ -8,7 +8,7 @@ from _common.serializers import custom_field
 
 
 class CitySerializer(custom_field.FieldSerializer):
-    name_field = 'city[]'
+    name_field = 'citys'
 
     class Meta:
         model = models.CityModel
@@ -16,7 +16,7 @@ class CitySerializer(custom_field.FieldSerializer):
 
 
 class TownSerializer(custom_field.FieldSerializer):
-    name_field = 'town[]'
+    name_field = 'towns'
 
     class Meta:
         model = models.TownModel

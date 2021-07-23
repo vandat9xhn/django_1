@@ -12,7 +12,7 @@ from _common.serializers.data_field import FieldSerializer, DataLikeSerializer
 
 
 class SubLikeSerializer(FieldSerializer):
-    name_field = 'sub_like[]'
+    name_field = 'sub_likes'
 
     #
 
@@ -22,7 +22,7 @@ class SubLikeSerializer(FieldSerializer):
 
 
 class SubHistorySerializer(FieldSerializer):
-    name_field = 'sub_history[]'
+    name_field = 'sub_historys'
 
     #
 
@@ -32,7 +32,7 @@ class SubHistorySerializer(FieldSerializer):
 
 
 class SubSerializer(DataLikeSerializer):
-    name_field = 'sub[]'
+    name_field = 'subs'
     #
     like_obj = SerializerMethodField()
     history_obj = SerializerMethodField()

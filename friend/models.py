@@ -9,15 +9,23 @@ from user_profile.models import ProfileModel
 
 
 class FriendModel(models.Model):
-    requester = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='fr_rq')
-    receiver = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='fr_rc')
-    created_time = models.DateField(auto_now_add=True)
+    profile_model = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='fr_rq')
+    friend_model = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='fr_rc')
+    is_follow = models.BooleanField(default=True)
+    updated_time = models.DateTimeField(auto_now=True)
+    created_time = models.DateTimeField(auto_now_add=True)
 
 
 class AddFriendModel(models.Model):
     requester = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='a_fr_rq')
     receiver = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='a_fr_rc')
-    created_time = models.DateField(auto_now_add=True)
+    has_seen = models.BooleanField(default=False)
+    created_time = models.DateTimeField(auto_now_add=True)
+
+
+class FriendRemoveModel(models.Model):
+    profile_model = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='a_fr_rm_pf')
+    friend_model = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='a_fr_rm_pf_f')
 
 
 # ------------- 0: having no mutual friend
@@ -41,8 +49,8 @@ def get_friend_id_arr(user):
     user_id = get_user_id(user)
 
     return [
-        *FriendModel.objects.filter(requester=user_id).values_list('receiver', flat=True),
-        *FriendModel.objects.filter(receiver=user_id).values_list('requester', flat=True)
+        *FriendModel.objects.filter(profile_model=user_id).values_list('friend_model', flat=True),
+        # *FriendModel.objects.filter(friend_model=user_id).values_list('friend_model', flat=True)
     ]
 
 
@@ -61,8 +69,7 @@ def friend_relative_num(user, friend):
 
     if str(user_id) == str(friend_id):
         relative = 3
-    elif FriendModel.objects.filter(
-            Q(requester=user_id, receiver=friend_id) | Q(requester=friend_id, receiver=user_id)):
+    elif FriendModel.objects.filter(profile_model=user_id, friend_model=friend_id).exists():
         relative = 2
     elif count_friend_mutual(user_id, friend_id) > 0:
         relative = 1

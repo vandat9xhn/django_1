@@ -13,7 +13,7 @@ from .like_share.serializers import LikeSerializer, LikeModel, ShareSerializer, 
 
 #
 class PostSerializer(DataLikeShareSerializer, ContentFieldSerializer):
-    name_field = 'post[]'
+    name_field = 'posts'
     #
     content_obj = SerializerMethodField()
     comment_obj = SerializerMethodField()

@@ -52,13 +52,10 @@ class ProductViewL(ProductView, NoTokenView, ListAPIView):
         if type_request == 'search':
             search = self.request.query_params.get('search')
             areas = self.request.query_params.getlist('area')
-            rate = self.request.query_params.get('rate')
+            rate = self.request.query_params.get('rate') or 0
             sort_by = self.request.query_params.get('sort')
 
             areas_regex = '.*(' + '|'.join(areas) + ').*'
-
-            if rate is None:
-                rate = 0
 
             return self.queryset.filter(
                 name__contains=search,

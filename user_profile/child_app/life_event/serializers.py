@@ -8,7 +8,7 @@ from _common.serializers import custom_field
 
 
 class LifeEventSerializer(custom_field.FieldSerializer):
-    name_field = 'life_event[]'
+    name_field = 'life_events'
 
     class Meta:
         model = models.LifeEventModel

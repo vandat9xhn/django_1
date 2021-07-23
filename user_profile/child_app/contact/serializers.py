@@ -8,7 +8,7 @@ from _common.serializers import custom_field
 
 
 class MailSerializer(custom_field.FieldSerializer):
-    name_field = 'mail[]'
+    name_field = 'mails'
 
     class Meta:
         model = models.MailModel
@@ -16,7 +16,7 @@ class MailSerializer(custom_field.FieldSerializer):
 
 
 class PhoneSerializer(custom_field.FieldSerializer):
-    name_field = 'phone[]'
+    name_field = 'phones'
 
     class Meta:
         model = models.PhoneModel
@@ -24,7 +24,7 @@ class PhoneSerializer(custom_field.FieldSerializer):
 
 
 class AddressSerializer(custom_field.FieldSerializer):
-    name_field = 'address[]'
+    name_field = 'addresss'
 
     class Meta:
         model = models.AddressModel

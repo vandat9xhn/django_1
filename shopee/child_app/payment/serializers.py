@@ -6,7 +6,7 @@ from .models import PaymentModel
 
 
 class PaymentSerializer(FieldSerializer):
-    name_field = 'payment[]'
+    name_field = 'payments'
     #
 
     class Meta:
