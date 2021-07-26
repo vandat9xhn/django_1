@@ -4,8 +4,9 @@ from . import models, serializers
 from _common.views.user_create import UserCreateLike
 from _common.views.user_update import UserUpdateToHistoryView
 from _common.views.user_delete import UserDestroyView
-from _common.views.facebook.post import FollowPostViewL, FollowCommentViewL
+
 from _common.views.facebook.post_create import CommentSubViewC
+from _common.views.facebook.post import FollowPostViewL, FollowCommentViewL,get_like_queryset
 
 # Create your views here.
 
@@ -48,8 +49,7 @@ class CommentViewLC(CommentView, FollowPostViewL, CommentSubViewC):
 
 class CommentViewUD(CommentView, UserUpdateToHistoryView, UserDestroyView):
 
-    @staticmethod
-    def get_update_fields():
+    def get_update_fields(self):
         return ['content', 'vid_pic']
 
     def handle_model_history(self, instance, data_history):
@@ -61,6 +61,9 @@ class CommentViewUD(CommentView, UserUpdateToHistoryView, UserDestroyView):
 
 #
 class CmtLikeViewLC(CmtLikeView, CmtLikeHistoryViewL, UserCreateLike):
+
+    def get_queryset(self):
+        return get_like_queryset(self.request, super().get_queryset())
 
     def get_instance_create(self):
         comment_id = self.request.data.get('comment_model')

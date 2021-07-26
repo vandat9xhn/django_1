@@ -75,3 +75,5 @@ class ProductViewL(ProductView, NoTokenView, ListAPIView):
             type_product = product_model.type
 
             return self.queryset.filter(type=type_product).exclude(id=product_id)
+
+        return []

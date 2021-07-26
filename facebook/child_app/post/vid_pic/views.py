@@ -4,11 +4,10 @@ from rest_framework.generics import ListAPIView, RetrieveAPIView
 #
 from . import models, serializers
 #
-from _common.views.facebook.post import FollowPostViewL, FollowVidPicViewL
+from _common.views.facebook.post import FollowPostViewL, FollowVidPicViewL, get_like_queryset
 from _common.views.user_create import UserCreateLike, UserCreateShare
 from _common.views.user_update import UserUpdateToHistoryView
 from _common.views.user_delete import UserDestroyView
-from _common.views.permission_view import PermissionViewR
 
 
 # --------------
@@ -66,7 +65,14 @@ class VidPicViewRUD(VidPicView, RetrieveAPIView, UserUpdateToHistoryView, UserDe
 
 #
 class VidPicLikeViewLC(VidPicLikeView, FollowVidPicViewL, UserCreateLike):
-    pass
+
+    def get_queryset(self):
+        return get_like_queryset(self.request, super().get_queryset())
+
+    def get_instance_create(self):
+        vid_pic_id = self.request.query_params['vid_pic_model']
+
+        return self.queryset.get(profile_model=self.request.user.id, vid_pic_model=vid_pic_id)
 
 
 #

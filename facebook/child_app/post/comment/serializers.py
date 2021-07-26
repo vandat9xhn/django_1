@@ -5,6 +5,7 @@ from .models import CommentModel, CmtLikeModel, CmtHistoryModel
 from .sub.serizializers import SubSerializer, SubModel
 #
 from _common.serializers.data_field import FieldSerializer, DataLikeSerializer
+from _common.serializers.content_field import ContentFieldSerializer
 #
 
 
@@ -29,9 +30,10 @@ class CmtHistorySerializer(FieldSerializer):
         model = CmtHistoryModel
 
 
-class CommentSerializer(DataLikeSerializer):
+class CommentSerializer(DataLikeSerializer, ContentFieldSerializer):
     name_field = 'comments'
     #
+    content_obj = SerializerMethodField()
     sub_obj = SerializerMethodField()
     like_obj = SerializerMethodField()
     history_obj = SerializerMethodField()
@@ -39,6 +41,9 @@ class CommentSerializer(DataLikeSerializer):
     class Meta:
         fields = '__all__'
         model = CommentModel
+
+    def get_content_obj(self, instance):
+        return self.get_content_more(instance.content)
 
     def get_sub_obj(self, instance):
         return self.get_arr_count(

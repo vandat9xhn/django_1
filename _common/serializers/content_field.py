@@ -5,8 +5,8 @@ from _common.serializers.custom_field import FieldSerializer
 
 class ContentFieldSerializer(FieldSerializer):
 
-    def get_content_more(self, field_name, content):
-        if self.context['request'].query_params.get(field_name + '_more_content') is not None:
+    def get_content_more(self, content):
+        if self.context['request'].query_params.get('has_more_content') is not None:
             return {
                 'content': content[100:],
                 'has_more_content': False

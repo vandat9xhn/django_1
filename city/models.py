@@ -7,14 +7,14 @@ from user_profile.models import ProfileModel
 
 class CityModel(models.Model):
     CHOICES_BG = [
-        ('', ''),
+        (0, 'bg-primary.text-primary'),
     ]
 
     profile_model = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='c_pf')
 
     city = models.CharField(max_length=200)
     street = models.CharField(max_length=200)
-    bg_color = models.CharField(max_length=10, choices=CHOICES_BG, default='')
+    bg_color = models.IntegerField(choices=CHOICES_BG, default=0)
     quote = models.TextField()
     image = models.ImageField(upload_to='media/city')
 

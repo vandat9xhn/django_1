@@ -25,7 +25,7 @@ class PermissionViewR(RetrieveAPIView):
         return relative >= self.get_permission_num()
 
     def get_profile_id(self):
-        return self.get_object().profile_model.id
+        return 0
 
     def get_permission_num(self):
         return self.get_object().permission

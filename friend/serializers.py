@@ -2,7 +2,7 @@ from rest_framework.serializers import SerializerMethodField
 # 
 from _common.serializers import data_field
 # 
-from user_profile.serializers import ProfileSerializer
+from user_profile.serializers import ProfileBaseSerializer
 from user_profile.models import ProfileModel
 # 
 from . import models
@@ -11,7 +11,7 @@ from . import models
 
 
 class FriendSerializer(data_field.DataSerializerR):
-    name_field = 'friends'
+    name_field = 'friend'
     # 
     friend = SerializerMethodField()
     
@@ -22,13 +22,13 @@ class FriendSerializer(data_field.DataSerializerR):
     def get_friend(self, instance):
 
         return self.get_data_r(
-            ProfileSerializer,
+            ProfileBaseSerializer,
             ProfileModel.objects.get(id=instance.friend_model.id)
         )
 
 
 class AddFriendSerializer(data_field.DataSerializerR):
-    name_field = 'add_friends'
+    name_field = 'add_friend'
     #
     requester = SerializerMethodField()
     receiver = SerializerMethodField()
@@ -40,13 +40,13 @@ class AddFriendSerializer(data_field.DataSerializerR):
     def get_requester(self, instance):
 
         return self.get_data_r(
-            ProfileSerializer,
+            ProfileBaseSerializer,
             ProfileModel.objects.get(id=instance.requester.id)
         )
 
     def get_receiver(self, instance):
 
         return self.get_data_r(
-            ProfileSerializer,
+            ProfileBaseSerializer,
             ProfileModel.objects.get(id=instance.receiver.id)
         )

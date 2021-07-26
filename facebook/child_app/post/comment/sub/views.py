@@ -4,7 +4,8 @@ from . import models, serizializers
 from _common.views.user_create import UserCreateView, UserCreateLike
 from _common.views.user_update import UserUpdateToHistoryView
 from _common.views.user_delete import UserDestroyView
-from _common.views.facebook.post import FollowSubViewL, FollowCommentViewL
+
+from _common.views.facebook.post import FollowSubViewL, FollowCommentViewL, get_like_queryset
 
 
 # Create your views here.
@@ -53,8 +54,7 @@ class SubViewLC(SubView, FollowCommentViewL, UserCreateView):
 
 class SubViewUD(SubView, UserUpdateToHistoryView, UserDestroyView):
 
-    @staticmethod
-    def get_update_fields():
+    def get_update_fields(self):
         return ['content', 'vid_pic']
 
     def handle_model_history(self, instance, data_history):
@@ -66,6 +66,9 @@ class SubViewUD(SubView, UserUpdateToHistoryView, UserDestroyView):
 
 #
 class SubLikeViewLC(SubLikeView, SubLikeHistoryViewL, UserCreateLike):
+
+    def get_queryset(self):
+        return get_like_queryset(self.request, super().get_queryset())
 
     def get_instance_create(self):
         sub_id = self.request.data.get('sub_model')

@@ -25,8 +25,8 @@ class ProductSerializer(DataSerializerL):
     name_field = 'products'
     #
     vid_pics = SerializerMethodField()
-    rates = SerializerMethodField()
-    comments = SerializerMethodField()
+    # rates = SerializerMethodField()
+    # comments = SerializerMethodField()
 
     class Meta:
         model = models.ProductModel
@@ -39,16 +39,16 @@ class ProductSerializer(DataSerializerL):
             'product_vid_pic'
         )
 
-    def get_rates(self, instance):
-        return self.get_data_l(
-            rate_serializers.ProductRateSerializer,
-            rate_models.ProductRateModel.objects.filter(product_model=instance.id),
-            'product_rate'
-        )
-
-    def get_comments(self, instance):
-        return self.get_data_l(
-            comment_serializers.ProductCmtSerializer,
-            comment_models.ProductCmtModel.objects.filter(product_model=instance.id),
-            'product_cmt'
-        )
+    # def get_rates(self, instance):
+    #     return self.get_data_l(
+    #         rate_serializers.ProductRateSerializer,
+    #         rate_models.ProductRateModel.objects.filter(product_model=instance.id),
+    #         'product_rate'
+    #     )
+    #
+    # def get_comments(self, instance):
+    #     return self.get_data_l(
+    #         comment_serializers.ProductCmtSerializer,
+    #         comment_models.ProductCmtModel.objects.filter(product_model=instance.id),
+    #         'product_cmt'
+    #     )

@@ -21,6 +21,7 @@ from user_profile.child_app.basis.models import BirthModel, GenderModel, Languag
 from user_profile.child_app.you.models import HobbyModel, AboutYouModel
 #
 from _common.views.no_token import NoTokenView
+from _common.some_defs.get_picture import get_profile_picture
 #
 import json
 import jwt
@@ -59,13 +60,12 @@ def make_cookie_from_account(username, password):
 #
 def get_data_profile(user_id):
     name_model = NameModel.objects.get(profile_model=user_id)
-    picture_model = PictureModel.objects.get(profile_model=user_id)
 
     return {
         'id': user_id,
         'first_name': name_model.first_name,
         'last_name': name_model.last_name,
-        'picture': picture_model.url,
+        'picture': get_profile_picture(user_id),
     }
 
 
@@ -168,10 +168,11 @@ def login(request):
     username = request.POST['username']
     password = request.POST['password']
     user = authenticate(username=username, password=password)
-    auth_login(request, user)
 
     if not user:
         return HttpResponse('Wrong')
+
+    auth_login(request, user)
 
     validated_data = get_data_save_refresh_from_account(username, password)
 
@@ -254,12 +255,12 @@ class RegisterView(NoTokenView, CreateAPIView):
             profile_model=profile_model,
         )
 
-        PictureModel.objects.create(
-            profile_model=profile_model,
-        )
-        CoverModel.objects.create(
-            profile_model=profile_model,
-        )
+        # PictureModel.objects.create(
+        #     profile_model=profile_model,
+        # )
+        # CoverModel.objects.create(
+        #     profile_model=profile_model,
+        # )
 
         MailModel.objects.create(
             profile_model=profile_model,

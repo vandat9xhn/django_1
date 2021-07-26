@@ -15,7 +15,7 @@ urlpatterns = [
     path('vid-pic-like-lc/', views.VidPicLikeViewLC.as_view()),
     path('vid-pic-share-lc/', views.VidPicShareViewLC.as_view()),
 
-    path('vid-pic-history-l/', views.VidPicHistoryViewL.as_view()),
+    path('vid-pic-his-l/', views.VidPicHistoryViewL.as_view()),
 
     *cmt_urls,
 ]

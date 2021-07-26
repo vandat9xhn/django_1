@@ -73,7 +73,7 @@ def handle_his_vid_pics(
         vid_pic_model = VidPicModel.objects.get(id=update_vid_pic_ids[i])
 
         if vid_pic_model.post_model.profile_model.id == user_id:
-            old_update_vid_pic_contents += vid_pic_model.content
+            old_update_vid_pic_contents += [vid_pic_model.content]
             vid_pic_model.content = update_vid_pic_contents[i]
             vid_pic_model.save()
         else:
@@ -147,7 +147,7 @@ class PostViewLC(PostView, ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         user_id = request.user.id
-        type_post = request.data.get('type_post')
+        type_post = request.data.get('type_post') or 'post'
 
         post_to_where = request.data.get('post_to_where') or 'user'
         post_to_id = request.data.get('post_to_id') or user_id
@@ -242,8 +242,10 @@ class PostViewLC(PostView, ListCreateAPIView):
 
 class PostViewRUD(PostView, PermissionViewR, UserUpdateToHistoryView, UserDestroyView):
 
-    @staticmethod
-    def get_update_fields():
+    def get_profile_id(self):
+        return self.get_object().profile_model.id
+
+    def get_update_fields(self):
         return ['content']
 
     def handle_model_history(self, instance, data_history):
@@ -279,13 +281,16 @@ class PostViewRUD(PostView, PermissionViewR, UserUpdateToHistoryView, UserDestro
         update_vid_pic_ids = self.request.data.getlist('update_vid_pic_ids')
         update_vid_pic_contents = self.request.data.getlist('update_vid_pic_contents')
         delete_vid_pic_ids = self.request.data.getlist('delete_vid_pic_ids')
-
+        print(update_vid_pic_ids)
         if len(create_vid_pics) + len(delete_vid_pic_ids) + len(update_vid_pic_ids) == 0:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        his_model = HistoryModel.objects.create(
-            post_model=instance,
-        )
+        if len(create_vid_pics) + len(delete_vid_pic_ids) > 0:
+            his_model = HistoryModel.objects.create(
+                post_model=instance,
+            )
+        else:
+            his_model = None
 
         handle_his_vid_pics(
             user_id, his_model, instance,

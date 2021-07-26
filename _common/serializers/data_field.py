@@ -15,7 +15,7 @@ class DataSerializerL(FieldSerializer):
             return serializer_class(
                 instance=queryset,
                 many=True,
-                context={'request': request}
+                context=self.context
             ).data
 
         c_count = request.query_params.get(f'{field}_c_count')
@@ -34,19 +34,18 @@ class DataSerializerL(FieldSerializer):
         return serializer_class(
             instance=queryset,
             many=True,
-            context={'request': request}
+            context=self.context
         ).data[c_count:size]
 
 
 class DataSerializerR(FieldSerializer):
 
     def get_data_r(self, serializer_class, queryset):
-        request = self.context['request']
 
         return serializer_class(
             instance=queryset,
             many=False,
-            context={'request': request}
+            context=self.context
         ).data
 
 
@@ -75,13 +74,12 @@ class ArrCountSerializer(DataSerializerL):
 class ArrWithCountSerializer(DataSerializerL):
 
     def get_arr_with_count(self, serializer, queryset, count):
-        request = self.context['request']
 
         return {
             'data': serializer(
                 instance=queryset,
                 many=True,
-                context={'request': request}
+                context=self.context
             ).data[0:count],
             'count': queryset.count()
         }
@@ -105,15 +103,13 @@ class DataLikeSerializer(ArrCountSerializer):
 class DataShareSerializer(ArrCountSerializer):
 
     def get_data_share(self, serializer, queryset, field):
-        user_count_share = 0
-        user = self.context['request'].user
-        if user:
-            user_count_share = queryset.filter(profile_model=user.id)
+        user_queryset = queryset.filter(profile_model=self.context['request'].user.id)
+        user_count_share = user_queryset.first().count if user_queryset else 0
 
         return {
             **self.get_arr_count(serializer, queryset, field),
             'user_count_share': user_count_share,
-            'total_share': sum(queryset.values_list('count'))
+            'total_share': sum(queryset.values_list('count', flat=True))
         }
 
 

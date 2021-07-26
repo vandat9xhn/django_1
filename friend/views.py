@@ -112,7 +112,7 @@ class AddFriendCountNewView(AddFriendView, ListAPIView):
 
     def get(self, request, *args, **kwargs):
 
-        count_new = self.queryset.filter(profile_model=request.user.id, has_seen=False).count()
+        count_new = self.queryset.filter(receiver=request.user.id, has_seen=False).count()
         return Response(data={'count': count_new})
 
 
@@ -144,15 +144,15 @@ class AddFriendViewLC(AddFriendView, ListCreateAPIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if models.AddFriendModel.objects.filter(
-                Q(profile_model=friend_id, friend_model=user_id) |
-                Q(profile_model=user_id, friend_model=friend_id)
+                Q(requester=friend_id, receiver=user_id) |
+                Q(requester=user_id, receiver=friend_id)
         ).exists():
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         #
         models.AddFriendModel.objects.create(
-            profile_model=ProfileModel.objects.get(id=user_id),
-            friend_model=ProfileModel.objects.get(id=friend_id)
+            requester=ProfileModel.objects.get(id=user_id),
+            receiver=ProfileModel.objects.get(id=friend_id)
         )
 
         return Response(status=status.HTTP_201_CREATED)
@@ -164,7 +164,8 @@ class AddFriendViewD(AddFriendView, DestroyAPIView):
         user_id = request.user.id
         friend_id = request.data['friend_model']
         self.queryset.filter(
-            Q(requester=user_id, receiver=friend_id) | Q(requester=friend_id, receiver=user_id)
+            Q(requester=user_id, receiver=friend_id) |
+            Q(requester=friend_id, receiver=user_id)
         ).delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)

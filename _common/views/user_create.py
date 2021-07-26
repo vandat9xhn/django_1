@@ -27,16 +27,15 @@ class UserCreateOnlyOne(UserCreateView):
 
     def create(self, request, *args, **kwargs):
         try:
-            instance = self.get_instance_create()
-            self.handle_exists(instance)
-
+            self.handle_exists(self.get_instance_create())
             return Response(status=status.HTTP_200_OK)
 
         except ObjectDoesNotExist:
             return super().create(request, *args, **kwargs)
 
     def get_instance_create(self):
-        return self.queryset.get(profile_model=self.request.user.id)
+        pass
+        # return self.queryset.get(profile_model=self.request.user.id)
 
     def handle_exists(self, instance):
         pass
@@ -51,6 +50,7 @@ class UserCreateLike(UserCreateOnlyOne):
             instance.delete()
         else:
             instance.type_like = new_type_like
+            instance.full_clean()
             instance.save()
 
 
@@ -65,26 +65,27 @@ class UserCreateShare(UserCreateView):
         except ObjectDoesNotExist:
             count_user_share = 0
 
-        max_share = self.get_max_share()
-
-        if count_user_share >= max_share:
+        if count_user_share >= self.get_max_share():
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if count_user_share == 0:
             return self.handle_create_share()
-
-        if count_user_share > 0:
+        else:
             return self.handle_update_share()
 
+    # limit share
     @staticmethod
     def get_max_share():
         return 0
 
+    # count share of user
     def get_count_user_share(self):
         return self.queryset.get(profile_model=self.request.user.id).count
 
+    # has not share before
     def handle_create_share(self):
         pass
 
+    # has share before
     def handle_update_share(self):
         pass

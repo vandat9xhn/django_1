@@ -47,4 +47,9 @@ class PhoneLapSerializer(FieldSerializer):
 
     @staticmethod
     def get_url(instance):
-        return models.VidPicModel.objects.filter(phone_lap_model=instance.id).first().vid_pic.url
+        vid_pic_queryset = models.VidPicModel.objects.filter(phone_lap_model=instance.id)
+
+        if vid_pic_queryset.exists():
+            return vid_pic_queryset.first().vid_pic.url
+
+        return ''

@@ -28,7 +28,7 @@ class NoticeCountNewView(NoticeView, ListAPIView):
     def get(self, request, *args, **kwargs):
         count_new = self.queryset.filter(profile_model=request.user.id, status_seen=0).count()
 
-        return Response({'data': count_new})
+        return Response(count_new)
 
 
 class NoticeViewU(NoticeView, UpdateAPIView):

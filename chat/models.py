@@ -10,9 +10,9 @@ from _common.models.choices import CHOICES_LIKE
 
 class RoomModel(models.Model):
     room_chat = models.CharField(max_length=100, unique=True, primary_key=True)
-    is_group = models.BooleanField()
-    owner = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='r_o')
-    creator = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='r_cr')
+    is_group = models.BooleanField(default=False)
+    owner = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='r_o', null=True)
+    creator = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, related_name='r_cr', null=True)
     created_time = models.DateTimeField(auto_now_add=True)
     updated_time = models.DateTimeField(auto_now=True)
 

@@ -7,7 +7,7 @@ from _common.serializers.facebook.post import InteractiveSerializer
 
 
 class LikeSerializer(InteractiveSerializer):
-    name_field = 'likes'
+    name_field = 'like'
 
     class Meta:
         model = LikeModel
@@ -15,7 +15,7 @@ class LikeSerializer(InteractiveSerializer):
 
 
 class ShareSerializer(InteractiveSerializer):
-    name_field = 'shares'
+    name_field = 'share'
 
     class Meta:
         model = ShareModel

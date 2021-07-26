@@ -66,7 +66,7 @@ class MessageSerializer(ArrWithCountSerializer):
         ).order_by('type_like').values_list('type_like', flat=True)
         
         return {
-            'distinct_user_like_arr': type_like_arr[0:3],
+            'distinct_user_like_arr': type_like_arr,
             'count': len(type_like_arr),
         }
 
@@ -83,10 +83,10 @@ class RoomSerializer(FieldSerializer):
         fields = '__all__'
 
     def get_user_obj(self, instance):
-        queryset = models.RoomUserModel.objects.filter(room_model=instance.id)
+        queryset = models.RoomUserModel.objects.filter(room_model=instance.room_chat)
         
         return {
-            'data': MessageSerializer(
+            'data': RoomUserSerializer(
                 instance=queryset,
                 many=True,
                 context=self.context
@@ -98,7 +98,7 @@ class RoomSerializer(FieldSerializer):
         request = self.context['request']
         message_page = request.query_params.get('message_page') or 1
 
-        message_instance = models.MessageModel.objects.filter(room_model=instance.id)
+        message_instance = models.MessageModel.objects.filter(room_model=instance.room_chat)
         count = message_instance.count()
 
         return {
@@ -114,7 +114,7 @@ class RoomSerializer(FieldSerializer):
         request = self.context['request']
         room_user_instance = models.RoomUserModel.objects.get(
             profile_model=request.user.id,
-            room_model=instance.id
+            room_model=instance.room_chat
         )
 
-        return room_user_instance.last_message - room_user_instance.last_receive
+        return room_user_instance.last_mess - room_user_instance.last_receive

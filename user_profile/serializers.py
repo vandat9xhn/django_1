@@ -3,8 +3,6 @@ from rest_framework.serializers import SerializerMethodField
 #
 from .models import ProfileModel, NameModel, PersonalSettingModel
 #
-from .child_app.picture.models import PictureModel, CoverModel
-
 from .child_app.basis import serializers as basis_ser
 from .child_app.life_event import serializers as life_ser
 from .child_app.contact import serializers as contact_ser
@@ -13,7 +11,8 @@ from .child_app.relation import serializers as relation_ser
 from .child_app.work import serializers as work_ser
 from .child_app.you import serializers as you_ser
 #
-from _common.serializers import data_field, permission_field
+from _common.serializers import data_field, permission_field, custom_field
+from _common.some_defs.get_picture import get_profile_picture, get_profile_cover
 
 
 # 
@@ -56,27 +55,27 @@ class ProfileSerializer(DataProfilePermissionSerializer):
     #
     gender_obj = SerializerMethodField()
     birth_obj = SerializerMethodField()
-    lang_obj = SerializerMethodField()
-
-    life_arr = SerializerMethodField()
-
-    mail_obj = SerializerMethodField()
-    phone_arr = SerializerMethodField()
-    address_arr = SerializerMethodField()
-
-    town_arr = SerializerMethodField()
-    city_arr = SerializerMethodField()
-
-    family_arr = SerializerMethodField()
-    relationship_obj = SerializerMethodField()
-
-    work_arr = SerializerMethodField()
-    school_arr = SerializerMethodField()
-    university_arr = SerializerMethodField()
-
-    hobby_obj = SerializerMethodField()
-    you_obj = SerializerMethodField()
-    other_name_arr = SerializerMethodField()
+    # lang_obj = SerializerMethodField()
+    #
+    # life_arr = SerializerMethodField()
+    #
+    # mail_obj = SerializerMethodField()
+    # phone_arr = SerializerMethodField()
+    # address_arr = SerializerMethodField()
+    #
+    # town_arr = SerializerMethodField()
+    # city_arr = SerializerMethodField()
+    #
+    # family_arr = SerializerMethodField()
+    # relationship_obj = SerializerMethodField()
+    #
+    # work_arr = SerializerMethodField()
+    # school_arr = SerializerMethodField()
+    # university_arr = SerializerMethodField()
+    #
+    # hobby_obj = SerializerMethodField()
+    # you_obj = SerializerMethodField()
+    # other_name_arr = SerializerMethodField()
 
     class Meta:
         fields = '__all__'
@@ -93,11 +92,11 @@ class ProfileSerializer(DataProfilePermissionSerializer):
 
     @staticmethod
     def get_picture(instance):
-        return PictureModel.objects.get(profile_model=instance.id, is_active=True).url
+        return get_profile_picture(instance.id)
 
     @staticmethod
     def get_cover(instance):
-        return CoverModel.objects.get(profile_model=instance.id, is_active=True).url
+        return get_profile_cover(instance.id)
 
     # basis
     def get_gender_obj(self, instance):
@@ -224,6 +223,31 @@ class ProfileSerializer(DataProfilePermissionSerializer):
             you_ser.models.OtherNameModel.objects.filter(profile_model=instance.id),
             instance
         )
+
+
+class ProfileBaseSerializer(custom_field.FieldSerializer):
+    name_field = 'profile_base'
+    #
+    first_name = SerializerMethodField()
+    last_name = SerializerMethodField()
+    picture = SerializerMethodField()
+
+    class Meta:
+        fields = '__all__'
+        model = ProfileModel
+
+    #
+    @staticmethod
+    def get_first_name(instance):
+        return NameModel.objects.get(profile_model=instance.id).first_name
+
+    @staticmethod
+    def get_last_name(instance):
+        return NameModel.objects.get(profile_model=instance.id).last_name
+
+    @staticmethod
+    def get_picture(instance):
+        return get_profile_picture(instance.id)
 
 
 class PersonalSettingSerializer(data_field.FieldSerializer):

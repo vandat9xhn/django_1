@@ -61,9 +61,11 @@ class UserUpdateToHistoryView(UpdateAPIView):
         data_new = {
             profile_model: user_id,
         }
-        update_fields = self.get_update_fields()
 
-        if not update_fields:
+        update_fields = self.request.data.getlist('update_fields')
+        if len(update_fields) == 0:
+            update_fields = self.get_update_fields()
+        elif update_fields[0] == '':
             update_fields = []
 
         for field in update_fields:
@@ -95,9 +97,8 @@ class UserUpdateToHistoryView(UpdateAPIView):
     def perform_update(self, serializer):
         serializer.save()
 
-    @staticmethod
-    def get_update_fields():
-        return ['']
+    def get_update_fields(self):
+        return []
 
     def handle_model_history(self, instance, data_history):
         pass

@@ -86,7 +86,9 @@ class RoomViewL(RoomView, ListAPIView):
         user_id = self.request.user.id
         room_chat_arr = models.RoomUserModel.objects.filter(
             profile_model=user_id
-        ).values_list('profile_model', flat=True)
+        ).values_list('room_model', flat=True)
+
+        print(room_chat_arr)
         
         return self.queryset.filter(room_chat__in=room_chat_arr)
 

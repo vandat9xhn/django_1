@@ -3,11 +3,7 @@ from rest_framework import status
 #
 from . import models, serializers
 #
-from ...post.models import PostModel
-#
-from user_profile.models import ProfileModel
-#
-from _common.views.facebook.post import FollowPostViewL
+from _common.views.facebook.post import FollowPostViewL, get_like_queryset
 from _common.views.user_create import UserCreateLike, UserCreateShare
 
 
@@ -27,24 +23,20 @@ class ShareView:
 # --------------
 
 
-class LikeShareViewL(FollowPostViewL):
+class LikeViewLC(LikeView, FollowPostViewL, UserCreateLike):
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        # Filter more permission
+        return get_like_queryset(self.request, super().get_queryset())
 
-        return queryset
-
-
-# --------------
-
-
-class LikeViewLC(LikeView, LikeShareViewL, UserCreateLike):
-    pass
+    def get_instance_create(self):
+        return self.queryset.get(
+            profile_model=self.request.user.id,
+            post_model=self.request.data.get('post_model'),
+        )
 
 
 #
-class ShareViewLC(ShareView, LikeShareViewL, UserCreateShare):
+class ShareViewLC(ShareView, FollowPostViewL, UserCreateShare):
 
     def has_permission_create(self):
         return super().has_permission_create()

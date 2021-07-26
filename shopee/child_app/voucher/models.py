@@ -6,8 +6,15 @@ from ..payment.models import PaymentModel
 
 
 class VoucherModel(models.Model):
-    condition_price = models.IntegerField()
+    name = models.CharField(max_length=100, default='')
     cost = models.IntegerField()
+    img = models.ImageField(null=True)
+    info = models.TextField(default='')
+
+    min_amount = models.IntegerField()
+    expires = models.IntegerField(default=0)
+    total_num = models.IntegerField(default=100)
+    count_user = models.IntegerField(default=0)
 
 
 class VoucherPaymentModel(models.Model):

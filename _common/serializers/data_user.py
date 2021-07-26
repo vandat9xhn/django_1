@@ -1,16 +1,20 @@
-from rest_framework.serializers import SerializerMethodField, ModelSerializer
+from rest_framework.serializers import SerializerMethodField
 #
-from _common.serializers.data_field import DataSerializerR, DataSerializerL
+from _common.serializers.custom_field import FieldSerializer
 #
-from user_profile.serializers import ProfileSerializer, ProfileModel
-from friend.models import friend_has_permission, friend_relative_num
-
+from user_profile.serializers import ProfileBaseSerializer
 
 #
 
 
-class DataProfileSerializer(DataSerializerR):
-    user = SerializerMethodField('get_user')
+class DataProfileSerializer(FieldSerializer):
+    # pass
+    user = SerializerMethodField()
 
-    def get_user(self):
-        return self.get_data_r(ProfileSerializer, ProfileModel)
+    def get_user(self, instance):
+
+        return ProfileBaseSerializer(
+            instance=instance.profile_model,
+            many=False,
+            context=self.context,
+        ).data

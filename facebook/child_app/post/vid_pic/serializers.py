@@ -1,16 +1,17 @@
 from rest_framework.serializers import SerializerMethodField
 #
-from _common.serializers.data_field import DataLikeShareSerializer, FieldSerializer
-#
 from .models import VidPicModel, VidPicLikeModel, VidPicShareModel, VidPicHistoryModel
-
+#
 from .comment.serializers import VidPicCmtSerializer, VidPicCmtModel
+#
+from _common.serializers.data_field import DataLikeShareSerializer, FieldSerializer
+from _common.serializers.content_field import ContentFieldSerializer
 
 #
 
 
 class VidPicLikeSerializer(FieldSerializer):
-    name_field = 'vid_pic_likes'
+    name_field = 'vid_pic_like'
     #
 
     class Meta:
@@ -19,7 +20,7 @@ class VidPicLikeSerializer(FieldSerializer):
 
 
 class VidPicShareSerializer(FieldSerializer):
-    name_field = 'vid_pic_shares'
+    name_field = 'vid_pic_share'
     #
 
     class Meta:
@@ -28,7 +29,7 @@ class VidPicShareSerializer(FieldSerializer):
 
 
 class VidPicHistorySerializer(FieldSerializer):
-    name_field = 'vid_pic_histories'
+    name_field = 'vid_pic_history'
     #
 
     class Meta:
@@ -39,17 +40,21 @@ class VidPicHistorySerializer(FieldSerializer):
 #
 
 
-class VidPicSerializer(DataLikeShareSerializer):
-    name_field = 'vid_pics'
+class VidPicSerializer(DataLikeShareSerializer, ContentFieldSerializer):
+    name_field = 'vid_pic'
     #
-    comment_obj = SerializerMethodField('get_comment_obj')
-    like_obj = SerializerMethodField('get_like_obj')
-    share_obj = SerializerMethodField('get_share_obj')
-    his_obj = SerializerMethodField('get_his_obj')
+    content_obj = SerializerMethodField()
+    comment_obj = SerializerMethodField()
+    like_obj = SerializerMethodField()
+    share_obj = SerializerMethodField()
+    his_obj = SerializerMethodField()
 
     class Meta:
         model = VidPicModel
         fields = '__all__'
+
+    def get_content_obj(self, instance):
+        return self.get_content_more(instance.content)
 
     def get_comment_obj(self, instance):
 

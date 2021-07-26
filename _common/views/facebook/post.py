@@ -14,6 +14,7 @@ from facebook.child_app.post.vid_pic.comment.sub.models import VidPicSubModel
 # --------------
 
 
+#
 class PostPermissionViewL(ListAPIView):
 
     def has_permission_queryset(self, follow_model):
@@ -35,6 +36,17 @@ class PostPermissionViewL(ListAPIView):
 
 # ------------
 
+#
+def get_like_queryset(request, queryset):
+    type_like = request.query_params['type_like']
+
+    if type_like == '-1':
+        return queryset
+    else:
+        return queryset.filter(type_like=type_like)
+
+# ------------
+
 
 class FollowPostViewL(PostPermissionViewL):
 
@@ -53,8 +65,6 @@ class FollowCommentViewL(PostPermissionViewL):
     def get_queryset(self):
         comment_id = self.request.query_params.get('comment_model')
         comment_model = CommentModel.objects.get(id=comment_id)
-
-        print(1)
 
         if self.has_permission_queryset(comment_model):
             return self.queryset.filter(comment_model=comment_id)

@@ -2,27 +2,11 @@ import sqlite3
 # 
 import random
 from datetime import datetime
+#
+from __default._common import get_cursor, insert_into_sqlite3, close_sqlite3
 
 
 #
-
-
-def repeat_str(string, time, delimiter=','):
-    return delimiter.join([string] * time)
-
-
-def get_cursor():
-    conn = sqlite3.connect('D:\\web\\react-django\\react_django_1\\db.sqlite3')
-    cur = conn.cursor()
-    return cur
-
-
-def insert_into_sqlite3(cur, table_name, count_field, data):
-    cur.executemany(f'Insert Into {table_name} Values(' + repeat_str('?', count_field) + ')', data)
-
-
-def close_sqlite3(cur):
-    cur.close()
 
 
 #

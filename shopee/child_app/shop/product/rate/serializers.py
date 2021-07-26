@@ -1,6 +1,7 @@
 from rest_framework.serializers import SerializerMethodField
 #
 from _common.serializers.content_field import ContentFieldSerializer
+from _common.serializers.data_user import DataProfileSerializer
 #
 from . import models
 
@@ -8,8 +9,8 @@ from . import models
 #
 
 
-class ProductRateSerializer(ContentFieldSerializer):
-    name_field = 'product_rates'
+class ProductRateSerializer(ContentFieldSerializer, DataProfileSerializer):
+    name_field = 'product_rate'
     #
     content_obj = SerializerMethodField()
 
@@ -18,4 +19,4 @@ class ProductRateSerializer(ContentFieldSerializer):
         fields = '__all__'
 
     def get_content_obj(self, instance):
-        return self.get_content_more('product_rate', instance.content)
+        return self.get_content_more(instance.content)

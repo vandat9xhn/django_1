@@ -5,7 +5,7 @@ from . import models, serializers
 from _common.views.user_create import UserCreateView, UserCreateLike
 from _common.views.user_update import UserUpdateToHistoryView
 from _common.views.user_delete import UserDestroyView
-from _common.views.facebook.post import FollowVidPicViewL, FollowVidPicCmtViewL
+from _common.views.facebook.post import FollowVidPicViewL, FollowVidPicCmtViewL, get_like_queryset
 
 
 # Create your views here.
@@ -53,8 +53,7 @@ class VidPicCmtViewLC(VidPicCmtView, FollowVidPicViewL, UserCreateView):
 
 class VidPicCmtViewUD(VidPicCmtView, UserUpdateToHistoryView, UserDestroyView):
 
-    @staticmethod
-    def get_update_fields():
+    def get_update_fields(self):
         return ['content', 'vid_pic']
 
     def handle_model_history(self, instance, data_history):
@@ -67,8 +66,11 @@ class VidPicCmtViewUD(VidPicCmtView, UserUpdateToHistoryView, UserDestroyView):
 #
 class VidPicCmtLikeViewLC(VidPicCmtLikeView, VidPicCmtLikeHistoryViewL, UserCreateLike):
 
+    def get_queryset(self):
+        return get_like_queryset(self.request, super().get_queryset())
+
     def get_instance_create(self):
-        comment_id = self.request.data.get('vid_pic_comment_model')
+        comment_id = self.request.data.get('vid_pic_cmt_model')
 
         return self.queryset.get(comment_model=comment_id, profile_model=self.request.user.id)
 
